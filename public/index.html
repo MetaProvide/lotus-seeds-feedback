@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lotus Seeds — Submit Feedback</title>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<style>
+  :root{
+    --bg:#0f2b2b; --paper:#f7f4ec; --ink:#0e2323; --muted:#5b6b66; --line:#dfd8c8;
+    --teal:#1f6f68; --teal-soft:#2e8f86; --plum:#7c4a6e; --gold:#c99a3f; --leaf:#e9f0ea;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 800px at 70% -10%, #1a4a47 0%, var(--bg) 55%, #0a1f20 100%);
+    color:var(--ink); min-height:100vh; padding:40px 16px; display:flex; justify-content:center;
+  }
+  .wrap{width:min(680px,100%)}
+  .head{text-align:center;color:var(--paper);margin-bottom:26px}
+  .lotus{width:60px;height:60px;margin-bottom:12px}
+  .head h1{font-size:34px;letter-spacing:-.02em;margin-bottom:8px}
+  .head p{color:rgba(247,244,236,.8);font-size:16px;max-width:46ch;margin:0 auto}
+  .card{background:var(--paper);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.28);padding:34px 34px 30px}
+  label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin:18px 0 7px}
+  label .req{color:var(--plum)}
+  .hint{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:6px}
+  input[type=text],input[type=email],textarea,select{
+    width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 14px;font-size:16px;
+    font-family:inherit;color:var(--ink);background:#fff;transition:.15s;-webkit-appearance:none;appearance:none
+  }
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235b6b66' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(31,111,104,.15)}
+  textarea{min-height:120px;resize:vertical}
+  .types{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+  .types label{margin:0;cursor:pointer;display:block;position:relative}
+  .types input{position:absolute;opacity:0;width:0;height:0;margin:0;pointer-events:none}
+  .types .opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    min-height:76px;border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center;
+    background:#fff;transition:.15s;font-weight:600;font-size:14px;color:var(--muted)}
+  .types .opt .em{font-size:20px;line-height:1}
+  .types input:checked + .opt{border-color:var(--teal);background:var(--leaf);color:var(--teal);box-shadow:0 0 0 3px rgba(31,111,104,.12)}
+  .types input:focus-visible + .opt{border-color:var(--teal);box-shadow:0 0 0 3px rgba(31,111,104,.25)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .actions{margin-top:24px;display:flex;flex-direction:column;gap:14px;align-items:center}
+  button{
+    background:var(--teal);color:#fff;border:none;border-radius:12px;padding:14px 30px;font-size:16px;
+    font-weight:700;cursor:pointer;transition:.15s;width:100%
+  }
+  button:hover{background:#185a54}
+  button:disabled{opacity:.55;cursor:not-allowed}
+  .msg{border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.5;display:none;margin-top:16px}
+  .msg.ok{display:block;background:var(--leaf);border:1px solid #cfe1d5;color:var(--teal)}
+  .msg.err{display:block;background:#fbeaea;border:1px solid #eecaca;color:#a23b3b}
+  .foot{color:rgba(247,244,236,.6);font-size:12.5px;text-align:center;margin-top:20px}
+  .foot a{color:var(--gold)}
+  .dropzone{border:1.5px dashed var(--line);border-radius:12px;padding:20px;text-align:center;color:var(--muted);
+    background:#fff;cursor:pointer;font-size:14px;transition:.15s;margin-top:6px}
+  .dropzone:hover,.dropzone.hover{border-color:var(--teal);color:var(--teal);background:var(--leaf)}
+  .editor{display:none;margin-top:10px}
+  .editor.on{display:block}
+  .toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+  .tool{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 11px;font-size:13px;
+    font-weight:600;color:var(--muted);cursor:pointer;transition:.12s}
+  .tool.on{border-color:var(--teal);background:var(--leaf);color:var(--teal)}
+  .tool:hover{border-color:var(--teal)}
+  .sep{width:1px;height:22px;background:var(--line);margin:0 3px}
+  .swatches{display:flex;gap:7px;align-items:center;margin:2px 0 10px}
+  .swatch{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+  .swatch.on{box-shadow:0 0 0 2px var(--teal)}
+  .canvas-wrap{border:1px solid var(--line);border-radius:12px;overflow:auto;background:#fbfaf7;padding:6px;max-height:440px}
+  .editor .tip{color:var(--muted);font-size:12px;margin-top:8px}
+  @media(max-width:600px){
+    body{padding:24px 12px}
+    .head h1{font-size:27px}
+    .head p{font-size:15px}
+    .card{padding:22px 18px;border-radius:16px}
+    .row{grid-template-columns:1fr}
+    .types{grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .types .opt{min-height:66px;padding:11px 6px;font-size:13px}
+    .types .opt .em{font-size:18px}
+  }
+  @media(max-width:380px){.types{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <svg class="lotus" viewBox="0 0 100 100" fill="none">
+      <path d="M50 84c-14-6-24-18-24-34 0 0 10 4 16 14 0-16 8-30 8-30s8 14 8 30c6-10 16-14 16-14 0 16-10 28-24 34Z" fill="#c99a3f" opacity=".95"/>
+      <path d="M50 84c-20-2-34-14-38-30 0 0 14-2 26 8-8-14-6-30-6-30" stroke="#e9f0ea" stroke-width="2.4" fill="none" opacity=".7"/>
+      <path d="M50 84c20-2 34-14 38-30 0 0-14-2-26 8 8-14 6-30 6-30" stroke="#e9f0ea" stroke-width="2.4" fill="none" opacity=".7"/>
+    </svg>
+    <h1>Share your feedback</h1>
+    <p>Spotted a bug, want a feature, or have an idea to make Lotus easier? Tell us here. Every submission reaches the team.</p>
+  </div>
+
+  <div class="card">
+    <form id="fbform" novalidate>
+      <label>What kind of feedback is this? <span class="req">*</span></label>
+      <div class="types">
+        <label><input type="radio" name="type" value="feature" required><span class="opt"><span class="em">&#10022;</span>Feature</span></label>
+        <label><input type="radio" name="type" value="improvement"><span class="opt"><span class="em">&#8593;</span>Improvement</span></label>
+        <label><input type="radio" name="type" value="bug"><span class="opt"><span class="em">&#9888;</span>Bug</span></label>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="centre">Your centre <span class="req">*</span></label>
+          <select id="centre" name="centre" required>
+            <option value="" disabled selected>Select&hellip;</option>
+            <option>IVY (Institut Vajra Yogini)</option>
+            <option>Jamyang (London)</option>
+            <option>Shantideva (New York)</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="name">Your name <span class="hint">optional</span></label>
+          <input type="text" id="name" name="name" maxlength="80" placeholder="So we know who to thank">
+        </div>
+      </div>
+
+      <label for="title">Short summary <span class="req">*</span></label>
+      <input type="text" id="title" name="title" maxlength="120" required placeholder="One line, e.g. can't set a waitlist limit on a course">
+
+      <label for="description">Details <span class="req">*</span> <span class="hint">what happened, or what you'd like</span></label>
+      <textarea id="description" name="description" required placeholder="Describe it in your own words. For a bug: what you did, what happened, and what you expected."></textarea>
+
+      <div class="row">
+        <div>
+          <label for="impact">Why it matters <span class="hint">optional</span></label>
+          <input type="text" id="impact" name="impact" maxlength="200" placeholder="Who it affects / how often">
+        </div>
+        <div>
+          <label for="email">Email <span class="hint">optional, for follow-up</span></label>
+          <input type="email" id="email" name="email" maxlength="120" placeholder="you@centre.org">
+        </div>
+      </div>
+
+      <label>Screenshot <span class="hint">optional — add arrows, boxes or notes before sending</span></label>
+      <div id="shotSection" class="shot">
+        <div id="shotDrop" class="dropzone">
+          Click to choose an image, drag one here, or paste a screenshot (Ctrl/Cmd+V)
+          <input type="file" id="shotFile" accept="image/*" hidden>
+        </div>
+        <div id="shotEditor" class="editor">
+          <div id="shotToolbar" class="toolbar"></div>
+          <div id="shotSwatches" class="swatches"></div>
+          <div class="canvas-wrap"><canvas id="shotCanvas"></canvas></div>
+          <div class="tip">Pick a tool, draw on the image. Use Move to reposition, Undo to step back.</div>
+        </div>
+      </div>
+
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" style="margin-top:20px"></div>
+
+      <div class="actions">
+        <button type="submit" id="submitBtn">Send feedback</button>
+      </div>
+      <div class="msg" id="msg"></div>
+    </form>
+  </div>
+
+  <div class="foot">Prefer to talk it through? Reach João or Lauren in the <a href="https://galaxy.metaprovide.org/call/xzfrt5aj" target="_blank" rel="noopener">Galaxy channel</a>.</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+<script src="/annotator.js" defer></script>
+<script>
+  const ENDPOINT = "/api/feedback";
+  const form = document.getElementById('fbform');
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('msg');
+
+  function show(type, text){ msg.className = 'msg ' + type; msg.textContent = text; }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    msg.className = 'msg';
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    if(!data.type || !data.centre || !data.title || !data.description){
+      show('err', 'Please fill in the required fields marked with *.'); return;
+    }
+    const tsField = form.querySelector('[name="cf-turnstile-response"]');
+    data['cf-turnstile-response'] = tsField ? tsField.value : '';
+
+    if (window.SeedsAnnotator && window.SeedsAnnotator.hasImage()) {
+      try { data.image = window.SeedsAnnotator.exportPng(); } catch (_) {}
+    }
+
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try{
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const out = await res.json().catch(function(){ return {}; });
+      if(res.ok){
+        form.reset();
+        if(window.SeedsAnnotator) window.SeedsAnnotator.reset();
+        if(window.turnstile) window.turnstile.reset();
+        show('ok', 'Thank you. Your feedback is on its way to the team.');
+      }else{
+        show('err', out.error || 'Something went wrong. Please try again, or message us in the Galaxy channel.');
+      }
+    }catch(err){
+      show('err', 'Could not reach the server. Check your connection and try again.');
+    }finally{
+      btn.disabled = false; btn.textContent = 'Send feedback';
+    }
+  });
+</script>
+</body>
+</html>
