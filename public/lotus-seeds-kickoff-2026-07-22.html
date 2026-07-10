@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lotus Seeds — Kickoff, 22 July 2026</title>
+<style>
+  :root{
+    --bg:#0f2b2b;
+    --bg2:#123536;
+    --ink:#0e2323;
+    --paper:#f7f4ec;
+    --muted:#5b6b66;
+    --line:#dfd8c8;
+    --teal:#1f6f68;
+    --teal-soft:#2e8f86;
+    --plum:#7c4a6e;
+    --gold:#c99a3f;
+    --leaf:#e9f0ea;
+    --accent:#e8b04b;
+    --shadow:0 20px 60px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 800px at 70% -10%, #1a4a47 0%, var(--bg) 55%, #0a1f20 100%);
+    color:var(--ink);
+    overflow:hidden;
+  }
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:3vh 3vw}
+  .slide{
+    position:absolute;
+    width:min(1040px,94vw);
+    height:min(660px,90vh);
+    background:var(--paper);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:56px 64px;
+    opacity:0;
+    transform:translateY(18px) scale(.985);
+    transition:opacity .5s ease, transform .5s ease;
+    pointer-events:none;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .slide.active{opacity:1;transform:none;pointer-events:auto}
+  .slide::before{
+    content:"";position:absolute;right:-90px;top:-90px;width:280px;height:280px;
+    background:radial-gradient(circle at center, rgba(201,154,63,.14), transparent 70%);
+    border-radius:50%;
+  }
+  .kicker{
+    text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:700;
+    color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:10px;
+  }
+  .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+  h1{font-size:52px;line-height:1.05;letter-spacing:-.02em;color:var(--ink);margin-bottom:18px}
+  h2{font-size:34px;line-height:1.1;letter-spacing:-.01em;color:var(--ink);margin-bottom:20px}
+  h3{font-size:19px;color:var(--teal);margin-bottom:6px}
+  p{font-size:18px;line-height:1.55;color:#33403c;max-width:60ch}
+  .lead{font-size:21px;color:#2a3a36}
+  .sub{color:var(--muted);font-size:16px}
+  .grid{display:grid;gap:18px;margin-top:10px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;
+    box-shadow:0 6px 20px rgba(20,50,48,.05);
+  }
+  .card h3{display:flex;align-items:center;gap:8px}
+  .card p{font-size:15.5px;line-height:1.5}
+  .num{font-size:13px;font-weight:800;color:#fff;background:var(--teal);width:26px;height:26px;
+    border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:0 0 26px}
+  ul.clean{list-style:none;margin-top:8px}
+  ul.clean li{position:relative;padding-left:26px;margin-bottom:12px;font-size:17.5px;line-height:1.5;color:#33403c}
+  ul.clean li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 0 4px rgba(201,154,63,.18)}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--leaf);color:var(--teal);
+    border:1px solid #cfe1d5;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600}
+  .pill.warm{background:#fbf1dc;color:#9a6b16;border-color:#efd9a6}
+  .pill.plum{background:#f4e9f1;color:var(--plum);border-color:#e7cfe0}
+  a{color:var(--teal);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(31,111,104,.35)}
+  .spacer{flex:1}
+  .footline{display:flex;justify-content:space-between;align-items:center;margin-top:auto;
+    padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  .footline .brand{font-weight:700;color:var(--teal);letter-spacing:.02em}
+
+  /* title slide */
+  .title-slide{align-items:center;text-align:center;justify-content:center}
+  .title-slide h1{font-size:64px}
+  .title-slide::after{
+    content:"";position:absolute;left:-70px;bottom:-70px;width:240px;height:240px;
+    background:radial-gradient(circle,rgba(124,74,110,.12),transparent 70%);border-radius:50%;
+  }
+  .lotus{width:96px;height:96px;margin-bottom:22px}
+  .meta-row{display:flex;gap:26px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+  .meta-row .pill{font-size:15px}
+
+  /* seeds slide */
+  .seed-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px}
+  .seed{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 16px;text-align:center;
+    box-shadow:0 6px 20px rgba(20,50,48,.05)}
+  .seed .badge{width:48px;height:48px;border-radius:50%;margin:0 auto 12px;display:flex;
+    align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:18px}
+  .seed.j .badge{background:var(--teal)}
+  .seed.s .badge{background:var(--plum)}
+  .seed.i .badge{background:var(--teal-soft)}
+  .seed.more{border-style:dashed;background:#fbfaf5}
+  .seed.more .badge{background:var(--gold)}
+  .seed h3{color:var(--ink);font-size:18px;margin-bottom:4px}
+  .seed .loc{color:var(--muted);font-size:14px}
+
+  /* timeline */
+  .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:26px;position:relative}
+  .timeline::before{content:"";position:absolute;left:8%;right:8%;top:26px;height:3px;
+    background:linear-gradient(90deg,var(--teal),var(--plum))}
+  .tl{position:relative;text-align:center;padding:0 10px}
+  .tl .knob{width:54px;height:54px;border-radius:50%;background:#fff;border:3px solid var(--teal);
+    margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-weight:800;
+    color:var(--teal);position:relative;z-index:1;font-size:14px}
+  .tl.b2 .knob{border-color:var(--plum);color:var(--plum)}
+  .tl.b3 .knob{border-color:var(--gold);color:#9a6b16}
+  .tl .date{font-weight:700;color:var(--ink);font-size:17px}
+  .tl .lbl{color:var(--muted);font-size:14px;margin-top:4px}
+  .demoflag{margin-top:24px;text-align:center}
+
+  /* roadmap gates */
+  .gates{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+  .gate{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 16px;
+    box-shadow:0 6px 20px rgba(20,50,48,.05);position:relative;border-top:4px solid var(--teal);
+    display:flex;flex-direction:column}
+  .gate.later{border-top-color:var(--gold);background:#fbfaf5}
+  .gate-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
+  .gate .glabel{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+  .gate.later .glabel{color:#9a6b16}
+  .gate .gtag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;
+    background:var(--leaf);color:var(--teal);border:1px solid #cfe1d5;border-radius:999px;padding:3px 9px}
+  .gate .gtag.warm{background:#fbf1dc;color:#9a6b16;border-color:#efd9a6}
+  .gate h3{font-size:16px;color:var(--ink);margin-bottom:6px}
+  .gate p{font-size:13px;line-height:1.45;color:#4a5854}
+  .gate-note{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+
+  /* nav */
+  .nav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;z-index:20}
+  .dots{display:flex;gap:8px}
+  .dots button{width:9px;height:9px;border-radius:50%;border:none;background:rgba(247,244,236,.35);cursor:pointer;padding:0;transition:.2s}
+  .dots button.on{background:var(--gold);transform:scale(1.3)}
+  .arrow{background:rgba(247,244,236,.12);border:1px solid rgba(247,244,236,.25);color:#f7f4ec;
+    width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;transition:.2s}
+  .arrow:hover{background:rgba(247,244,236,.24)}
+  .counter{position:fixed;top:22px;right:28px;color:rgba(247,244,236,.7);font-size:13px;letter-spacing:.05em;z-index:20}
+  .hint{position:fixed;bottom:24px;right:28px;color:rgba(247,244,236,.5);font-size:12px;z-index:20}
+  @media (max-width:720px){
+    /* Full-bleed, internally scrollable slides so nothing gets clipped */
+    .stage{padding:0}
+    .slide{
+      inset:0;width:100%;max-width:none;height:100%;
+      border-radius:0;
+      padding:58px 20px 104px;               /* clears fixed counter (top) + nav (bottom) */
+      overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    }
+    .slide::before{width:180px;height:180px;right:-60px;top:-60px}
+    .kicker{font-size:11px;margin-bottom:12px}
+    h1{font-size:34px}.title-slide h1{font-size:40px}
+    h2{font-size:24px;margin-bottom:14px}
+    h3{font-size:17px}
+    p{font-size:16px;line-height:1.5}
+    .lead{font-size:18px}
+    .grid{gap:12px}
+    .g2,.g3,.seed-grid,.timeline,.gates{grid-template-columns:1fr}
+    .timeline{gap:18px}
+    .timeline::before{display:none}
+    .card{padding:16px}
+    .card p{font-size:14.5px}
+    ul.clean li{font-size:16px;padding-left:24px}
+    .meta-row{gap:12px}
+    .footline{font-size:12px}
+    /* interface chrome */
+    .counter{top:14px;right:16px;font-size:12px}
+    .hint{display:none}
+    .nav{bottom:16px;gap:14px;background:rgba(10,31,32,.55);padding:8px 14px;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+    .arrow{width:44px;height:44px;font-size:20px}
+    .dots{gap:9px}
+    .dots button{width:9px;height:9px}
+  }
+  @media (max-width:400px){
+    .slide{padding:54px 16px 100px}
+    h2{font-size:22px}
+    .title-slide h1{font-size:34px}
+    .lotus{width:72px;height:72px}
+  }
+</style>
+</head>
+<body>
+
+<div class="counter"><span id="cur">1</span> / <span id="tot">10</span></div>
+
+<div class="stage" id="stage">
+
+  <!-- 1 TITLE -->
+  <section class="slide title-slide active">
+    <svg class="lotus" viewBox="0 0 100 100" fill="none">
+      <path d="M50 84c-14-6-24-18-24-34 0 0 10 4 16 14 0-16 8-30 8-30s8 14 8 30c6-10 16-14 16-14 0 16-10 28-24 34Z" fill="#c99a3f" opacity=".9"/>
+      <path d="M50 84c-20-2-34-14-38-30 0 0 14-2 26 8-8-14-6-30-6-30" stroke="#e9f0ea" stroke-width="2.4" fill="none" opacity=".7"/>
+      <path d="M50 84c20-2 34-14 38-30 0 0-14-2-26 8 8-14 6-30 6-30" stroke="#e9f0ea" stroke-width="2.4" fill="none" opacity=".7"/>
+    </svg>
+    <div class="kicker" style="justify-content:center"><span class="dot"></span> Champion Centre Program</div>
+    <h1>Lotus Seeds</h1>
+    <p class="lead" style="max-width:52ch">The centres who shape Lotus while we build it. Welcome to the kickoff.</p>
+    <div class="meta-row">
+      <span class="pill">Kickoff · 22 July 2026</span>
+      <span class="pill plum">Hosted by João &amp; Lauren</span>
+      <span class="pill warm">MetaProvide × Lotus</span>
+    </div>
+  </section>
+
+  <!-- 2 WHAT IS LOTUS -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> What Lotus is</div>
+    <h2>One home for a Dharma centre, one account for every practitioner</h2>
+    <p>Lotus brings events, registrations, lodging, meals, payments, and fiscal compliance into a single platform, built for small teams and limited budgets. A practitioner gets one account that travels with them to every centre they attend.</p>
+    <div class="grid g3" style="margin-top:26px">
+      <div class="card"><h3><span class="num">1</span> Centre</h3><p>The tools your centre runs on every day: events, registration, lodging, meals, payments, compliance.</p></div>
+      <div class="card"><h3><span class="num">2</span> Network</h3><p>Cross-centre discovery. Visitors find events, teachers, and programmes across the network, no account needed.</p></div>
+      <div class="card"><h3><span class="num">3</span> Network of networks</h3><p>An organisation tier above centres, turning Lotus into a platform for global communities of practice.</p></div>
+    </div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Built by MetaProvide for the FPMT network and beyond</span></div>
+  </section>
+
+  <!-- 3 NORTH STAR -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> Our north star</div>
+    <h2>We measure success by usability and happiness of use</h2>
+    <p class="lead">Not feature count. Not screens shipped. The question we keep asking is simple: does using Lotus feel calm, clear, and genuinely helpful to the people running a centre and the people attending it?</p>
+    <div class="grid g2" style="margin-top:28px">
+      <div class="card"><h3>What we optimise for</h3><p>Fewer steps, less confusion, less admin overhead. Software that gets out of the way so centres can focus on practice, not tooling.</p></div>
+      <div class="card"><h3>Why it matters</h3><p>Centres run on small teams and goodwill. If the tool is a burden, it fails, no matter how many features it has. Ease of use is the product.</p></div>
+    </div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Usability and happiness &gt; feature count</span></div>
+  </section>
+
+  <!-- 4 WHY SEEDS MATTER -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> Why the Seeds matter</div>
+    <h2>You are not testers. You are shaping the product.</h2>
+    <p>Lotus only becomes calm and usable if real operators pressure-test it before launch. Each build cycle, the Seeds try the new work with real centre scenarios and tell us what feels wrong. That signal is what makes the September go-live safe.</p>
+    <ul class="clean" style="margin-top:20px">
+      <li><strong>You catch what we can't see.</strong> We build it; you live it. The friction you feel is the friction every future centre would feel.</li>
+      <li><strong>You set priorities.</strong> Your feedback feeds directly into what we fix and build next, not a suggestion box that goes nowhere.</li>
+      <li><strong>You de-risk the launch.</strong> Problems found now are cheap. Problems found after go-live are expensive and public.</li>
+    </ul>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Real operators, validating every cycle</span></div>
+  </section>
+
+  <!-- 5 YOUR ROLE -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> Your role &amp; commitment</div>
+    <h2>What being a Seed actually involves</h2>
+    <div class="grid g2" style="margin-top:8px">
+      <div class="card"><h3>Every ~3 weeks</h3><p>Join a short session where we show the cycle's new work and walk it through with you. Roughly one hour, plus a little hands-on time between meetings.</p></div>
+      <div class="card"><h3>Try it with real scenarios</h3><p>Use the new features the way your centre actually would, not a scripted demo. Register a real event, add a real programme, see where it breaks.</p></div>
+      <div class="card"><h3>Tell us what feels wrong</h3><p>Log anything: a confusing step, a missing option, a bug. Small friction counts. That is exactly the signal we need.</p></div>
+      <div class="card"><h3>Who should join</h3><p>The person who runs registrations or operations day to day. Board or governance questions have their own separate track.</p></div>
+    </div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Light commitment, high leverage</span></div>
+  </section>
+
+  <!-- 6 COMMS -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> How we stay in touch</div>
+    <h2>One channel, and a direct line to us</h2>
+    <p>Everything Seeds-related lives in one place so nothing gets lost in email threads.</p>
+    <div class="grid g2" style="margin-top:24px">
+      <div class="card">
+        <h3>The Galaxy channel</h3>
+        <p>Our shared space for updates, questions, and discussion between meetings:</p>
+        <p style="margin-top:10px"><a href="https://galaxy.metaprovide.org/call/xzfrt5aj" target="_blank">galaxy.metaprovide.org</a></p>
+      </div>
+      <div class="card">
+        <h3>Talk to us directly</h3>
+        <p>You can always reach <strong>João</strong> or <strong>Lauren</strong> in the channel. No question is too small, and you never need to wait for the next meeting.</p>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Async first · reach us anytime</span></div>
+  </section>
+
+  <!-- 7 FEEDBACK FORM -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> The feedback loop</div>
+    <h2>A simple form for any feature, improvement, or bug</h2>
+    <p>One place to submit anything you notice. And crucially, your feedback does not disappear into a void, here is where it goes.</p>
+    <div class="grid g3" style="margin-top:22px">
+      <div class="card"><h3><span class="num">1</span> You submit</h3><p>Feature idea, improvement, or bug. A few seconds, from the channel.</p></div>
+      <div class="card"><h3><span class="num">2</span> We triage</h3><p>It lands on our board, gets reviewed, and we tell you what we're doing with it.</p></div>
+      <div class="card"><h3><span class="num">3</span> You see it land</h3><p>Accepted items show up on the roadmap and in the next cycle's demo.</p></div>
+    </div>
+    <div style="margin-top:24px"><span class="pill">Submit feedback: <a href="https://feedback.joyfuleffort.com/" target="_blank" rel="noopener">feedback.joyfuleffort.com</a></span></div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Every item gets a response</span></div>
+  </section>
+
+  <!-- 8 WHO ARE THE SEEDS -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> Who the Seeds are today</div>
+    <h2>A small circle, growing</h2>
+    <p>We're starting deliberately small so every voice is heard, and opening up more seats as the programme finds its rhythm.</p>
+    <div class="seed-grid">
+	  <div class="seed j"><div class="badge">J</div><h3>Jamyang</h3><div class="loc">London, UK · urban centre</div></div>
+      <div class="seed i"><div class="badge">I</div><h3>IVY</h3><div class="loc">Institut Vajra Yogini, France · residential · lead pilot</div></div>
+      <div class="seed s"><div class="badge">S</div><h3>Shantideva</h3><div class="loc">New York City, US · urban centre</div></div>
+      <div class="seed more"><div class="badge">+</div><h3>More to come</h3><div class="loc">New Seed centres joining soon</div></div>
+    </div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Small circle, real influence</span></div>
+  </section>
+
+  <!-- 9 CADENCE -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> The cadence</div>
+    <h2>We meet every three weeks, one per build cycle</h2>
+    <p>Each meeting is tied to a feature gate the team is delivering, so you always see real, working software, not slides about future plans.</p>
+    <div class="timeline">
+      <div class="tl b1"><div class="knob">1</div><div class="date">22 July</div><div class="lbl">Kickoff &amp; first look</div></div>
+      <div class="tl b2"><div class="knob">2</div><div class="date">12 August</div><div class="lbl">Cycle review</div></div>
+      <div class="tl b3"><div class="knob">3</div><div class="date">2 September</div><div class="lbl">Cycle review &amp; run-up to launch</div></div>
+    </div>
+    <div class="demoflag"><span class="pill plum">Final MVP demo: 8 September — your feedback shapes what's in it</span></div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Working software every cycle</span></div>
+  </section>
+
+  <!-- 10 ROADMAP / GATES -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> The bigger picture</div>
+    <h2>Where Lotus is headed, and what we're committing to now</h2>
+    <p>Lotus is built in four gates. Two are locked in for this launch. The other two are real and on the map, but still taking shape, so we want to be honest about what we can promise you today.</p>
+    <div class="gates">
+      <div class="gate">
+        <div class="gate-head"><span class="glabel">Gate A</span><span class="gtag">Committing now</span></div>
+        <h3>Events &amp; Registration</h3>
+        <p>Event catalogue, sessions, registration and waitlist. The core operators touch every day.</p>
+      </div>
+      <div class="gate">
+        <div class="gate-head"><span class="glabel">Gate B</span><span class="gtag">Committing now</span></div>
+        <h3>Payments &amp; Finance</h3>
+        <p>Invoicing, Stripe payments, refunds, tax and fiscal compliance. Money handled correctly.</p>
+      </div>
+      <div class="gate later">
+        <div class="gate-head"><span class="glabel">Gate C</span><span class="gtag warm">Still shaping</span></div>
+        <h3>Lodging &amp; Meals</h3>
+        <p>Rooms, beds and kitchen for residential centres. The hardest domain, scope and timing still open.</p>
+      </div>
+      <div class="gate later">
+        <div class="gate-head"><span class="glabel">Gate D</span><span class="gtag warm">Still shaping</span></div>
+        <h3>Community &amp; Memberships</h3>
+        <p>Memberships, class passes, volunteers and comms. On the roadmap, not yet dated.</p>
+      </div>
+    </div>
+    <div class="gate-note">
+      <span class="pill">Now: Gate A + B, targeting the September launch</span>
+      <span class="pill warm">Later: Gate C + D, we'll shape these together with you</span>
+    </div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Committed where we're sure, honest where we're not</span></div>
+  </section>
+
+  <!-- 11 FIRST TASK -->
+  <section class="slide">
+    <div class="kicker"><span class="dot"></span> Your first task</div>
+    <h2>Before 12 August: create one real event</h2>
+    <p class="lead">The best way to feel Lotus is to use it for something true to your centre.</p>
+    <ul class="clean" style="margin-top:18px">
+      <li><strong>Set up one real upcoming event</strong> the way your centre would actually run it, a class, a weekend, a course.</li>
+      <li><strong>Note one thing that felt off</strong> along the way: a confusing step, a missing option, or anything that made you hesitate.</li>
+      <li><strong>Drop it in the Galaxy channel</strong> before we meet on 12 August. One honest observation is enough to make the next cycle better.</li>
+    </ul>
+    <div style="margin-top:22px"><span class="pill">That's it. Thank you for helping Lotus grow.</span></div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>See you on 12 August</span></div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button class="arrow" id="prev" aria-label="Previous">‹</button>
+  <div class="dots" id="dots"></div>
+  <button class="arrow" id="next" aria-label="Next">›</button>
+</div>
+<div class="hint">← → arrows or space to navigate</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dotsWrap=document.getElementById('dots');
+  const cur=document.getElementById('cur');
+  document.getElementById('tot').textContent=slides.length;
+  let i=0;
+  slides.forEach((_,n)=>{
+    const b=document.createElement('button');
+    if(n===0)b.classList.add('on');
+    b.addEventListener('click',()=>go(n));
+    dotsWrap.appendChild(b);
+  });
+  const dots=[...dotsWrap.children];
+  function go(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+    cur.textContent=i+1;
+    if(slides[i]) slides[i].scrollTop=0;   // start each slide from the top on mobile
+  }
+  document.getElementById('next').addEventListener('click',()=>go(i+1));
+  document.getElementById('prev').addEventListener('click',()=>go(i-1));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(i+1);}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+    if(e.key==='Home')go(0);
+    if(e.key==='End')go(slides.length-1);
+  });
+
+  // Touch-swipe navigation. Only a clearly horizontal swipe changes slides,
+  // so vertical scrolling within a tall slide keeps working.
+  const stage=document.getElementById('stage');
+  let tsX=0,tsY=0,tracking=false;
+  stage.addEventListener('touchstart',e=>{
+    if(e.touches.length!==1){tracking=false;return;}
+    tsX=e.touches[0].clientX;tsY=e.touches[0].clientY;tracking=true;
+  },{passive:true});
+  stage.addEventListener('touchend',e=>{
+    if(!tracking)return; tracking=false;
+    const t=e.changedTouches[0];
+    const dx=t.clientX-tsX, dy=t.clientY-tsY;
+    if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.6){
+      go(dx<0 ? i+1 : i-1);
+    }
+  },{passive:true});
+</script>
+</body>
+</html>
