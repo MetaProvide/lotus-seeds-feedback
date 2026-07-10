@@ -97,7 +97,7 @@ async function uploadImage(env, dataUrl) {
   const r = await fetch(url, {
     method: "PUT",
     headers: ghHeaders(assetsToken(env)),
-    body: JSON.stringify({ message: "feedback screenshot " + path, content: b64, branch: branch }),
+    body: JSON.stringify({ message: "[CF-Pages-Skip] feedback screenshot " + path, content: b64, branch: branch }),
   });
   if (!r.ok) throw new Error("contents api " + r.status + ": " + (await r.text()));
   const data = await r.json();
