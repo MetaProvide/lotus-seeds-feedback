@@ -7,7 +7,8 @@
  * Action there creates the issue. The GitHub token never reaches the browser.
  *
  * Env (Pages -> Settings -> Variables and Secrets):
- *   GITHUB_TOKEN     (secret) fine-grained PAT, Contents R/W on BOTH lotus and this repo
+ *   LOTUS_TOKEN      (secret) classic toke (dispatch)
+ *   ASSETS_TOKEN     (secret) fine-grained PAT for ASSETS_REPO, Contents R/W (image upload)
  *   GITHUB_REPO      "MetaProvide/lotus"                (dispatch target)
  *   ASSETS_REPO      "MetaProvide/lotus-seeds-feedback" (public repo storing images)
  *   ASSETS_BRANCH    "uploads"                          (branch for images)
@@ -67,7 +68,7 @@ export async function onRequestPost(context) {
   const eventType = env.DISPATCH_EVENT_TYPE || "seeds-feedback";
   const res = await fetch("https://api.github.com/repos/" + env.GITHUB_REPO + "/dispatches", {
     method: "POST",
-    headers: ghHeaders(env),
+    headers: ghHeaders(lotusToken(env)),
     body: JSON.stringify({ event_type: eventType, client_payload: payload }),
   });
 
@@ -95,7 +96,7 @@ async function uploadImage(env, dataUrl) {
   const url = "https://api.github.com/repos/" + env.ASSETS_REPO + "/contents/" + path;
   const r = await fetch(url, {
     method: "PUT",
-    headers: ghHeaders(env),
+    headers: ghHeaders(assetsToken(env)),
     body: JSON.stringify({ message: "feedback screenshot " + path, content: b64, branch: branch }),
   });
   if (!r.ok) throw new Error("contents api " + r.status + ": " + (await r.text()));
@@ -103,9 +104,19 @@ async function uploadImage(env, dataUrl) {
   return (data && data.content && data.content.download_url) || "";
 }
 
-function ghHeaders(env) {
+// Token for the dispatch target (lotus).
+function lotusToken(env) {
+  return env.LOTUS_TOKEN;
+}
+
+// Token for the assets repo (lotus-seeds-feedback).
+function assetsToken(env) {
+  return env.ASSETS_TOKEN;
+}
+
+function ghHeaders(token) {
   return {
-    Authorization: "Bearer " + env.GITHUB_TOKEN,
+    Authorization: "Bearer " + token,
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "lotus-seeds-feedback",
