@@ -106,7 +106,7 @@ div from the HTML and leave `TURNSTILE_SECRET` unset; the honeypot still runs.
 `.github/workflows/seeds-feedback-issue.yml` in `MetaProvide/lotus` listens for the
 `seeds-feedback` dispatch and creates the issue with the built-in `GITHUB_TOKEN`
 (no extra secret needed on the Action side). Create these labels in the repo so they get
-nice colours: `seeds`, `type: feature`, `type: improvement`, `type: bug`.
+nice colours: `seeds`, `request`, `enhancement`, `bug`.
 
 ## Wire it to the roadmap board (the "Incoming" column)
 
@@ -127,5 +127,6 @@ wrangler pages dev public
 ## Notes
 - `repository_dispatch` is fire-and-forget: a submitter always sees success. If the Action
   fails, it shows only in the repo's **Actions** tab, not to the user. Watch it after launch.
-- Field → issue mapping (built in the Action): Type → title prefix + `type:` label;
+- Field → issue mapping (built in the Action): Type → `request`, `enhancement`, or `bug`
+  label;
   Summary → title; Centre / Details / Why it matters / Name / Email → issue body.
