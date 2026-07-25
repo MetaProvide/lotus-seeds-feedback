@@ -7,6 +7,16 @@
  */
 (function () {
   const COLORS = ["#e5484d", "#f5b301", "#1f6f68", "#111111", "#ffffff"];
+  const ICONS = {
+    select: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg>',
+    rect: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1"/></svg>',
+    arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M10 5h9v9"/></svg>',
+    text: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14M12 5v14M8 19h8"/></svg>',
+    pen: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M4 20l4.5-1L19 8.5 15.5 5 5 15.5 4 20Z"/></svg>',
+    undo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7 4 12l5 5M4 12h10a6 6 0 0 1 6 6"/></svg>',
+    clear: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 18-3-3 9-9 5 5-7 7H7ZM14 19h6"/></svg>',
+    remove: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v5M14 11v5M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+  };
   const MAX_CANVAS_W = 560;
   const MAX_EXPORT_W = 1600;
 
@@ -91,39 +101,72 @@
       ["pen", "Pen"],
     ];
     els.toolbar.innerHTML = "";
+    const drawGroup = document.createElement("div");
+    drawGroup.className = "toolbar-group";
+    drawGroup.setAttribute("role", "group");
+    drawGroup.setAttribute("aria-label", "Annotation tools");
+    const drawLabel = document.createElement("span");
+    drawLabel.className = "toolbar-label"; drawLabel.textContent = "Draw";
+    const drawControls = document.createElement("div");
+    drawControls.className = "tool-controls";
+    drawGroup.append(drawLabel, drawControls);
     tools.forEach(([m, label]) => {
       const b = document.createElement("button");
-      b.type = "button"; b.className = "tool"; b.dataset.mode = m; b.textContent = label;
+      b.type = "button"; b.className = "tool"; b.dataset.mode = m; b.innerHTML = `${ICONS[m]}<span>${label}</span>`;
+      b.setAttribute("aria-pressed", "false");
       b.addEventListener("click", () => setMode(m));
-      els.toolbar.appendChild(b);
+      drawControls.appendChild(b);
     });
-    const sep = document.createElement("span"); sep.className = "sep"; els.toolbar.appendChild(sep);
-
-    const undo = document.createElement("button");
-    undo.type = "button"; undo.className = "tool"; undo.textContent = "Undo";
-    undo.addEventListener("click", doUndo); els.toolbar.appendChild(undo);
-
-    const clear = document.createElement("button");
-    clear.type = "button"; clear.className = "tool"; clear.textContent = "Clear";
-    clear.addEventListener("click", doClear); els.toolbar.appendChild(clear);
-
-    const remove = document.createElement("button");
-    remove.type = "button"; remove.className = "tool"; remove.textContent = "Remove image";
-    remove.addEventListener("click", removeImage); els.toolbar.appendChild(remove);
+    els.toolbar.appendChild(drawGroup);
 
     els.swatches.innerHTML = "";
     COLORS.forEach((c) => {
       const s = document.createElement("button");
       s.type = "button"; s.className = "swatch" + (c === color ? " on" : "");
-      s.style.background = c; s.dataset.color = c;
+      s.style.background = c; s.dataset.color = c; s.setAttribute("aria-label", `Use ${c} annotation colour`);
+      s.setAttribute("aria-pressed", String(c === color));
       s.addEventListener("click", () => setColor(c));
       els.swatches.appendChild(s);
     });
+
+    const colorGroup = document.createElement("div");
+    colorGroup.className = "toolbar-group";
+    colorGroup.setAttribute("role", "group");
+    colorGroup.setAttribute("aria-label", "Annotation colour");
+    const colorLabel = document.createElement("span");
+    colorLabel.className = "toolbar-label"; colorLabel.textContent = "Colour";
+    colorGroup.append(colorLabel, els.swatches);
+    els.toolbar.appendChild(colorGroup);
+
+    const editGroup = document.createElement("div");
+    editGroup.className = "toolbar-group";
+    editGroup.setAttribute("role", "group");
+    editGroup.setAttribute("aria-label", "Image editing actions");
+    const editLabel = document.createElement("span");
+    editLabel.className = "toolbar-label"; editLabel.textContent = "Edit";
+    const editControls = document.createElement("div");
+    editControls.className = "tool-controls";
+    const actions = [
+      { label: "Undo", icon: "undo", action: doUndo },
+      { label: "Clear", icon: "clear", action: doClear },
+      { label: "Remove image", icon: "remove", action: removeImage },
+    ];
+    actions.forEach(({ label, icon, action }) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "tool" + (label === "Remove image" ? " danger" : ""); b.innerHTML = `${ICONS[icon]}<span>${label}</span>`;
+      b.addEventListener("click", action); editControls.appendChild(b);
+    });
+    editGroup.append(editLabel, editControls);
+    els.toolbar.appendChild(editGroup);
   }
 
   function setColor(c) {
     color = c;
-    [...els.swatches.children].forEach((s) => s.classList.toggle("on", s.dataset.color === c));
+    [...els.swatches.children].forEach((s) => {
+      const selected = s.dataset.color === c;
+      s.classList.toggle("on", selected);
+      s.setAttribute("aria-pressed", String(selected));
+    });
     if (canvas && canvas.freeDrawingBrush) canvas.freeDrawingBrush.color = c;
     const o = canvas && canvas.getActiveObject();
     if (o) {
@@ -136,7 +179,11 @@
 
   function setMode(m) {
     mode = m;
-    [...els.toolbar.querySelectorAll(".tool")].forEach((b) => b.classList.toggle("on", b.dataset.mode === m));
+    [...els.toolbar.querySelectorAll(".tool[data-mode]")].forEach((b) => {
+      const selected = b.dataset.mode === m;
+      b.classList.toggle("on", selected);
+      b.setAttribute("aria-pressed", String(selected));
+    });
     if (!canvas) return;
     canvas.isDrawingMode = (m === "pen");
     if (m === "pen") {
