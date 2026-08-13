@@ -166,6 +166,26 @@ collects personal data under GDPR. The Function also records the Cloudflare-repo
 country (`source_country`) for spam triage, and drops any website URL that is not
 `http(s)` so nothing odd renders as a link in the issue.
 
+### Payload shape (important)
+
+`repository_dispatch` allows **at most 10 top-level properties** in `client_payload`;
+GitHub returns `422 Invalid request. No more than 10 properties are allowed` otherwise.
+The sign-up form has 16 fields, so the Function nests them into four objects:
+
+```json
+{
+  "centre":  { "name", "type", "type_key", "country", "network", "website_url", "size" },
+  "contact": { "name", "role", "email" },
+  "details": { "needs", "current_tools", "timeline", "notes" },
+  "meta":    { "submitted_at", "source_country" }
+}
+```
+
+Nesting depth is not limited, only the top-level count. **If you add a field, put it inside
+one of these four objects** rather than at the top level, and read it in the Action as
+`centre.x` / `details.x` and so on. The feedback endpoint sends 8 top-level properties and
+is unaffected, but the same ceiling applies if it grows.
+
 **To customise:**
 - **Contact email in the thank-you panel** — change `lotus@metaprovide.org` in
   `public/centres.html` (appears twice: the done panel and the error copy).

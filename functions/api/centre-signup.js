@@ -59,23 +59,33 @@ export async function onRequestPost(context) {
 
   const cf = request.cf || {};
 
+  // GitHub caps client_payload at 10 top-level properties, so the fields are
+  // grouped into four nested objects. Nested depth is not limited.
   const payload = {
-    centre_type: VALID_CENTRE_TYPES[centreType],
-    centre_type_key: centreType,
-    centre_name: centreName,
-    country: country,
-    network: clip(body.network, 80),
-    website_url: clipUrl(body.website_url, 200),
-    contact_name: contactName,
-    role: clip(body.role, 80),
-    email: email,
-    size: clip(body.size, 60),
-    needs: normalizeNeeds(body.needs),
-    current_tools: clip(body.current_tools, 160),
-    timeline: clip(body.timeline, 60),
-    notes: clip(body.notes, 2000),
-    submitted_at: new Date().toISOString(),
-    source_country: clip(cf.country, 8),
+    centre: {
+      name: centreName,
+      type: VALID_CENTRE_TYPES[centreType],
+      type_key: centreType,
+      country: country,
+      network: clip(body.network, 80),
+      website_url: clipUrl(body.website_url, 200),
+      size: clip(body.size, 60),
+    },
+    contact: {
+      name: contactName,
+      role: clip(body.role, 80),
+      email: email,
+    },
+    details: {
+      needs: normalizeNeeds(body.needs),
+      current_tools: clip(body.current_tools, 160),
+      timeline: clip(body.timeline, 60),
+      notes: clip(body.notes, 2000),
+    },
+    meta: {
+      submitted_at: new Date().toISOString(),
+      source_country: clip(cf.country, 8),
+    },
   };
 
   const eventType = env.SIGNUP_DISPATCH_EVENT_TYPE || "centre-signup";
