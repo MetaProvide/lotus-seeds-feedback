@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lotus — Bring your centre onto the platform</title>
+<meta name="description" content="Tell us about your centre and we will get in touch about offering your programme through Lotus.">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<style>
+  :root{
+    --bg:#0f2b2b; --paper:#f7f4ec; --ink:#0e2323; --muted:#5b6b66; --line:#dfd8c8;
+    --teal:#1f6f68; --teal-soft:#2e8f86; --plum:#7c4a6e; --gold:#c99a3f; --leaf:#e9f0ea;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 800px at 70% -10%, #1a4a47 0%, var(--bg) 55%, #0a1f20 100%);
+    color:var(--ink); min-height:100vh; padding:40px 16px; display:flex; justify-content:center;
+  }
+  .wrap{width:min(680px,100%)}
+  .head{text-align:center;color:var(--paper);margin-bottom:26px}
+  .lotus{width:60px;height:60px;margin-bottom:12px}
+  .head h1{font-size:34px;letter-spacing:-.02em;margin-bottom:8px}
+  .head p{color:rgba(247,244,236,.8);font-size:16px;max-width:48ch;margin:0 auto}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+  .pill{border:1px solid rgba(247,244,236,.28);border-radius:999px;padding:6px 13px;font-size:12.5px;
+    color:rgba(247,244,236,.82);background:rgba(247,244,236,.06)}
+  .card{background:var(--paper);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.28);padding:34px 34px 30px}
+  .lead{color:var(--muted);font-size:14.5px;line-height:1.55;padding-bottom:20px;border-bottom:1px solid var(--line)}
+  label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin:18px 0 7px}
+  label .req{color:var(--plum)}
+  .hint{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:6px}
+  input[type=text],input[type=email],input[type=url],textarea,select{
+    width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 14px;font-size:16px;
+    font-family:inherit;color:var(--ink);background:#fff;transition:.15s;-webkit-appearance:none;appearance:none
+  }
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235b6b66' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(31,111,104,.15)}
+  input.invalid,textarea.invalid,select.invalid{border-color:#c0564f;box-shadow:0 0 0 3px rgba(192,86,79,.14)}
+  input.invalid:focus,textarea.invalid:focus,select.invalid:focus{border-color:#c0564f;box-shadow:0 0 0 3px rgba(192,86,79,.22)}
+  .field-error{display:none;color:#a23b3b;font-size:12.5px;margin-top:6px}
+  .field-error.on{display:block}
+  textarea{min-height:110px;resize:vertical}
+  .types{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:6px}
+  .types label{margin:0;cursor:pointer;display:block;position:relative}
+  .types input{position:absolute;opacity:0;width:0;height:0;margin:0;pointer-events:none}
+  .types .opt{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;
+    min-height:82px;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:left;
+    background:#fff;transition:.15s;font-weight:700;font-size:14px;color:var(--ink)}
+  .types .opt .em{font-size:19px;line-height:1}
+  .types .opt .sub{font-weight:400;font-size:12.5px;color:var(--muted);line-height:1.35}
+  .types input:checked + .opt{border-color:var(--teal);background:var(--leaf);color:var(--teal);box-shadow:0 0 0 3px rgba(31,111,104,.12)}
+  .types input:checked + .opt .sub{color:var(--teal-soft)}
+  .types input:focus-visible + .opt{border-color:var(--teal);box-shadow:0 0 0 3px rgba(31,111,104,.25)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+  .checks label{margin:0;display:flex;align-items:center;gap:9px;font-weight:500;font-size:14px;
+    border:1px solid var(--line);border-radius:11px;padding:11px 13px;background:#fff;cursor:pointer;transition:.15s}
+  .checks label:hover{border-color:var(--teal-soft)}
+  .checks label:has(input:checked){border-color:var(--teal);background:var(--leaf);color:var(--teal);font-weight:600}
+  .checks input{width:16px;height:16px;accent-color:var(--teal);flex:none;margin:0}
+  .consent{display:flex;gap:10px;align-items:flex-start;margin-top:22px;font-size:13.5px;color:var(--muted);line-height:1.5}
+  .consent input{width:17px;height:17px;accent-color:var(--teal);flex:none;margin-top:2px}
+  .consent a{color:var(--teal)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .actions{margin-top:22px;display:flex;flex-direction:column;gap:14px;align-items:center}
+  button{
+    background:var(--teal);color:#fff;border:none;border-radius:12px;padding:14px 30px;font-size:16px;
+    font-weight:700;cursor:pointer;transition:.15s;width:100%
+  }
+  button:hover{background:#185a54}
+  button:disabled{opacity:.55;cursor:not-allowed}
+  .msg{border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.5;display:none;margin-top:16px}
+  .msg.ok{display:block;background:var(--leaf);border:1px solid #cfe1d5;color:var(--teal)}
+  .msg.err{display:block;background:#fbeaea;border:1px solid #eecaca;color:#a23b3b}
+  .done{display:none;text-align:center;padding:8px 0 4px}
+  .done.on{display:block}
+  .done .tick{width:56px;height:56px;border-radius:50%;background:var(--leaf);color:var(--teal);
+    display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
+  .done h2{font-size:22px;margin-bottom:10px}
+  .done p{color:var(--muted);font-size:15px;line-height:1.6;max-width:44ch;margin:0 auto 8px}
+  .foot{color:rgba(247,244,236,.6);font-size:12.5px;text-align:center;margin-top:20px;line-height:1.6}
+  .foot a{color:var(--gold)}
+  @media(max-width:600px){
+    body{padding:24px 12px}
+    .head h1{font-size:27px}
+    .head p{font-size:15px}
+    .card{padding:22px 18px;border-radius:16px}
+    .row,.types,.checks{grid-template-columns:1fr}
+    .types .opt{min-height:auto}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <svg class="lotus" viewBox="0 0 100 100" fill="none">
+      <path d="M50 84c-14-6-24-18-24-34 0 0 10 4 16 14 0-16 8-30 8-30s8 14 8 30c6-10 16-14 16-14 0 16-10 28-24 34Z" fill="#c99a3f" opacity=".95"/>
+      <path d="M50 84c-20-2-34-14-38-30 0 0 14-2 26 8-8-14-6-30-6-30" stroke="#e9f0ea" stroke-width="2.4" fill="none" opacity=".7"/>
+      <path d="M50 84c20-2 34-14 38-30 0 0-14-2-26 8 8-14 6-30 6-30" stroke="#e9f0ea" stroke-width="2.4" fill="none" opacity=".7"/>
+    </svg>
+    <h1>Bring your centre onto Lotus</h1>
+    <p>One platform for your events, registrations, payments and people, built with Dharma centres rather than adapted from hotel software.</p>
+    <div class="pills">
+      <span class="pill">Events &amp; registration</span>
+      <span class="pill">Payments &amp; invoicing</span>
+      <span class="pill">Lodging &amp; meals</span>
+      <span class="pill">Members &amp; volunteers</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="formPane">
+      <p class="lead">Tell us about your centre and we will come back to you with what onboarding would look like, what it costs, and when we could start. Takes about two minutes, and nothing is committed.</p>
+
+      <form id="centreForm" novalidate>
+        <label>What kind of centre are you? <span class="req">*</span></label>
+        <div class="types">
+          <label><input type="radio" name="centre_type" value="residential" required><span class="opt"><span class="em">&#9968;</span>Residential<span class="sub">Lodging, meals, multi-day retreats</span></span></label>
+          <label><input type="radio" name="centre_type" value="urban"><span class="opt"><span class="em">&#9679;</span>Urban / city<span class="sub">Weekly classes, workshops, memberships</span></span></label>
+          <label><input type="radio" name="centre_type" value="retreat"><span class="opt"><span class="em">&#9784;</span>Retreat-only<span class="sub">Periodic retreats, quiet in between</span></span></label>
+          <label><input type="radio" name="centre_type" value="virtual"><span class="opt"><span class="em">&#9737;</span>Online<span class="sub">No physical venue, distributed community</span></span></label>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="centre_name">Centre name <span class="req">*</span></label>
+            <input type="text" id="centre_name" name="centre_name" maxlength="120" required placeholder="e.g. Jamyang Buddhist Centre">
+          </div>
+          <div>
+            <label for="country">Country <span class="req">*</span></label>
+            <input type="text" id="country" name="country" maxlength="60" required placeholder="e.g. Portugal" autocomplete="country-name">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="network">Network or tradition <span class="hint">optional</span></label>
+            <input type="text" id="network" name="network" maxlength="80" placeholder="e.g. FPMT, Plum Village, independent">
+          </div>
+          <div>
+            <label for="website">Website <span class="hint">optional</span></label>
+            <input type="url" id="website" name="website_url" maxlength="200" placeholder="https://" autocomplete="url">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="contact_name">Your name <span class="req">*</span></label>
+            <input type="text" id="contact_name" name="contact_name" maxlength="80" required placeholder="Who we should reply to" autocomplete="name">
+          </div>
+          <div>
+            <label for="role">Your role <span class="hint">optional</span></label>
+            <input type="text" id="role" name="role" maxlength="80" placeholder="e.g. director, registrar" autocomplete="organization-title">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="email">Email <span class="req">*</span></label>
+            <input type="email" id="email" name="email" maxlength="120" required placeholder="you@centre.org" autocomplete="email" aria-describedby="emailError">
+            <div class="field-error" id="emailError">Please enter a valid email address, e.g. you@centre.org.</div>
+          </div>
+          <div>
+            <label for="size">Roughly how big? <span class="hint">optional</span></label>
+            <select id="size" name="size">
+              <option value="" disabled selected>Select&hellip;</option>
+              <option>Under 100 participants a year</option>
+              <option>100 to 500 a year</option>
+              <option>500 to 2,000 a year</option>
+              <option>More than 2,000 a year</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+        </div>
+
+        <label>What do you most need help with? <span class="hint">pick any</span></label>
+        <div class="checks">
+          <label><input type="checkbox" name="needs" value="Events and registration">Events &amp; registration</label>
+          <label><input type="checkbox" name="needs" value="Payments and invoicing">Payments &amp; invoicing</label>
+          <label><input type="checkbox" name="needs" value="Lodging and meals">Lodging &amp; meals</label>
+          <label><input type="checkbox" name="needs" value="Memberships and donations">Memberships &amp; donations</label>
+          <label><input type="checkbox" name="needs" value="Volunteers and residents">Volunteers &amp; residents</label>
+          <label><input type="checkbox" name="needs" value="Fiscal compliance">Fiscal compliance</label>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="current_tools">What do you use today? <span class="hint">optional</span></label>
+            <input type="text" id="current_tools" name="current_tools" maxlength="160" placeholder="e.g. SeminarDesk, spreadsheets, Eventbrite">
+          </div>
+          <div>
+            <label for="timeline">When would you want to start? <span class="hint">optional</span></label>
+            <select id="timeline" name="timeline">
+              <option value="" disabled selected>Select&hellip;</option>
+              <option>As soon as possible</option>
+              <option>Within 3 months</option>
+              <option>Within 6 months</option>
+              <option>Just exploring for now</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="notes">Anything else we should know? <span class="hint">optional</span></label>
+        <textarea id="notes" name="notes" maxlength="2000" placeholder="What is hardest about running your centre right now? What would make Lotus worth switching for?"></textarea>
+
+        <label class="consent" for="consent">
+          <input type="checkbox" id="consent" name="consent" required>
+          <span>I agree that MetaProvide may store these details and contact me about Lotus. We will not share them with anyone else, and you can ask us to delete them at any time. Here is our <a href="https://metaprovide.org/privacy-policy" target="_blank" rel="noopener">privacy policy</a>.</span>
+        </label>
+
+        <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAADyo6DxM5LYzwHbv" style="margin-top:20px"></div>
+
+        <div class="actions">
+          <button type="submit" id="submitBtn">Send my details</button>
+        </div>
+        <div class="msg" id="msg"></div>
+      </form>
+    </div>
+
+    <div class="done" id="donePane">
+      <div class="tick">&#10003;</div>
+      <h2>Thank you</h2>
+      <p>Your details are with the Lotus team. Someone will write to you within a few working days to arrange a short call.</p>
+      <p>If it is urgent, reply to us directly at <a href="mailto:lauren@joyfuleffort.com">lauren@joyfuleffort.com</a>.</p>
+    </div>
+  </div>
+
+  <div class="foot">
+    Already using Lotus and want to report something? <a href="/">Send feedback instead</a>.<br>
+    Lotus is built by  <a href="https://www.joyfuleffort.com/ " target="_blank" rel="noopener">Joyful Effort</a> and <a href="https://metaprovide.org" target="_blank" rel="noopener">MetaProvide</a> for Dharma centres and contemplative communities.
+  </div>
+</div>
+
+<script>
+  const ENDPOINT = "/api/centre-signup";
+  const form = document.getElementById('centreForm');
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('msg');
+  const formPane = document.getElementById('formPane');
+  const donePane = document.getElementById('donePane');
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('emailError');
+
+  // Pragmatic email pattern: something@something.tld, no spaces.
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function show(type, text){ msg.className = 'msg ' + type; msg.textContent = text; }
+
+  function emailIsValid(){ return EMAIL_RE.test(emailInput.value.trim()); }
+
+  function setEmailError(on){
+    emailInput.classList.toggle('invalid', on);
+    emailError.classList.toggle('on', on);
+    emailInput.setAttribute('aria-invalid', on ? 'true' : 'false');
+  }
+  emailInput.addEventListener('blur', function(){
+    if(emailInput.value.trim() !== '') setEmailError(!emailIsValid());
+  });
+  emailInput.addEventListener('input', function(){
+    if(emailInput.classList.contains('invalid')) setEmailError(!emailIsValid());
+  });
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    msg.className = 'msg';
+
+    const fd = new FormData(form);
+    const data = Object.fromEntries(fd.entries());
+    data.needs = fd.getAll('needs');
+
+    if(!data.centre_type || !data.centre_name || !data.country || !data.contact_name || !data.email){
+      show('err', 'Please fill in the required fields marked with *.'); return;
+    }
+    if(!emailIsValid()){
+      setEmailError(true);
+      emailInput.focus();
+      show('err', 'Please enter a valid email address.'); return;
+    }
+    if(!data.consent){
+      show('err', 'Please tick the consent box so we may contact you.'); return;
+    }
+
+    const tsField = form.querySelector('[name="cf-turnstile-response"]');
+    data['cf-turnstile-response'] = tsField ? tsField.value : '';
+
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try{
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const out = await res.json().catch(function(){ return {}; });
+      if(res.ok){
+        formPane.style.display = 'none';
+        donePane.classList.add('on');
+        donePane.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }else{
+        show('err', out.error || 'Something went wrong. Please try again, or write to lauren@joyfuleffort.com.');
+        if(window.turnstile) window.turnstile.reset();
+      }
+    }catch(err){
+      show('err', 'Could not reach the server. Check your connection and try again.');
+      if(window.turnstile) window.turnstile.reset();
+    }finally{
+      btn.disabled = false; btn.textContent = 'Send my details';
+    }
+  });
+</script>
+</body>
+</html>
