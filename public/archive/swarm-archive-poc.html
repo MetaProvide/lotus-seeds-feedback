@@ -1,0 +1,1075 @@
+<title>Lotus Archive &mdash; FPMT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        background: '#fdfaff',
+        foreground: '#1a0f20',
+        card: '#ffffff',
+        primary: { DEFAULT: '#a24a89', foreground: '#ffffff' },
+        brand:   { DEFAULT: '#a24a89', deep: '#6d3285', tint: '#f4daff' },
+        accent:  { DEFAULT: '#f3e7f1', foreground: '#6d3682' },
+        muted:   { DEFAULT: '#f3eee3', foreground: '#8a6898' },
+        border:  '#a24a8924',
+        heading: '#a24a89',
+        text:    { DEFAULT: '#242124', muted: '#6b666b' },
+        sidebar: '#f6f1e7',
+        warn:    { DEFAULT: '#fde9b0', fg: '#7a4e10' },
+        ok:      { DEFAULT: '#e6efe2', fg: '#416b33' }
+      },
+      fontFamily: { sans: ['Mulish', 'ui-sans-serif', 'system-ui', 'sans-serif'] }
+    }
+  }
+}
+</script>
+<script>
+/* ============================================================================
+   EDIT HERE.  Everything you need to point this page at real Swarm content.
+   ----------------------------------------------------------------------------
+   1. Set GATEWAY to whichever node you are testing against.
+   2. Paste the collection reference into a record's `reference` field.
+   3. Reload. Empty reference = the record renders as "Queued for upload".
+
+   GATEWAY options
+     http://localhost:1633            a Bee node you run (incl. `bee dev`)
+     https://api.gateway.ethswarm.org public gateway, download only
+     https://<ref>.bzz.link           subdomain-style public gateway
+
+   NOTE: `bee dev` data never leaves your machine, so a public gateway will
+   NOT resolve it. Use localhost for dev-mode uploads, and only switch to a
+   public gateway once the collection is on the real network.
+   ========================================================================== */
+const CONFIG = {
+  // Public gateway. The collection is on the real Swarm network, so any
+  // gateway resolves it.
+  //
+  // WARNING about bzz.link: it answers 206 but does not honour mid-file byte
+  // ranges -- asking for 1 KB from the middle of audio.opus returns the whole
+  // 13 MB file. Playback from the start is fine; SEEKING is slow and can land
+  // in the wrong place. The gateway check at the top of the page flags this.
+  //
+  // Alternatives, both verified to honour ranges exactly:
+  //   https://api.gateway.ethswarm.org   public, CORS *, seeking works
+  //   http://localhost:1633              our own node; also restores the
+  //                                      postage-batch TTL (see loadStampTTL)
+  GATEWAY: 'https://bzz.link',
+
+  // File names inside each uploaded collection folder.
+  FILES: {
+    audio:      'audio.opus',
+    transcript: 'transcript.txt',
+    metadata:   'metadata.json'
+  },
+
+  // Show the gateway diagnostics panel. Set false for a clean screenshot.
+  SHOW_DIAGNOSTICS: true,
+
+  // Hosts where /stamps is reachable because we run the node: our own dev
+  // machines and the HejBit / MetaProvide gateway. Anything else is treated
+  // as a public gateway, which blocks /stamps by design, so batch life cannot
+  // be read from the browser there.
+  OWN_GATEWAY_HOSTS: ['localhost', '127.0.0.1', 'hejbit', 'joyfuleffort'],
+
+  // Which record appears in the big "Recently preserved" panel.
+  FEATURED: 'kopan-33',
+
+  records: [
+    {
+      // ---------------------------------------------------------------------
+      // THE TEST RECORD. Kopan 33 is fully public on lamayeshe.com: unedited
+      // transcript on the page, audio with a real download button.
+      //
+      // Source files for packaging (Archive #1257, Day 1, First Discourse A):
+      //   page      https://www.lamayeshe.com/article/kopan-course-no-33-2000-audio-and-unedited-transcripts
+      //   player    https://www.lamayeshe.com/audio-player/18309
+      //   mp3       https://www.lamayeshe.com/sites/default/files/audio/2_1827_First_Discourse_Part_A.mp3
+      //   download  https://www.lamayeshe.com/media/6478/download?attachment   (30.44 MB)
+      //   edited    https://www.lamayeshe.com/article/kopan-course-no-33-2000
+      //
+      // Transcript is HTML on the page, not a file — copy it into transcript.txt.
+      // metadata.json you write yourself from the fields below.
+      // ---------------------------------------------------------------------
+      id: 'kopan-33',
+      title: 'Kopan Course No. 33',
+      teacher: 'Lama Zopa Rinpoche',
+      date: 'Day 1 &middot; 2000',
+      place: 'Kopan Monastery, Nepal',
+      meta: 'Archive #1257 &middot; First Discourse, Part A',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: true,
+      sourceUrl: 'https://www.lamayeshe.com/article/kopan-course-no-33-2000-audio-and-unedited-transcripts',
+      // Uploaded 3 Sep 2026 to the real Swarm network. Verified byte-identical
+      // through bzz.link: all three files hash the same as the local originals.
+      reference: '8bc42e02f4012d1c8d79d49b40685181cc197a6bc02371d58c9f24c3f2db0d13',
+      stamp: '954319f6374dd78af5c815ff874fcfd9579a85e58453098f7ee09828483da942',
+      stampNote: 'Immutable batch, paid for by MetaProvide. Real BZZ is committed; the batch drains and must be topped up.',
+      durationSeconds: 3446,
+      // Optional: sha256 of transcript.txt, captured before upload.
+      // If set, "Verify" compares the downloaded file against it.
+      transcriptSha256: '9da10130527a30e14be542925b40600eebff748169f5575f1397a45919c9253f'
+    },
+    {
+      // Login-gated on lamayeshe.com, so it genuinely sits in the
+      // "awaiting rights clearance" state rather than the queue.
+      id: 'kopan-3',
+      title: 'Kopan Course No. 3',
+      teacher: 'Lama Yeshe &amp; Lama Zopa Rinpoche',
+      date: 'October &ndash; November 1972',
+      place: 'Kopan Monastery, Kathmandu, Nepal',
+      meta: 'Members-only on lamayeshe.com',
+      formats: ['Transcript'],
+      rightsCleared: false,
+      sourceUrl: 'https://www.lamayeshe.com/article/kopan-course-no-03-no-04-1972-73',
+      reference: ''
+    },
+    {
+      id: 'lawudo',
+      title: 'Teachings at Lawudo Retreat',
+      teacher: 'Lama Zopa Rinpoche',
+      date: 'Spring 1973',
+      place: 'Lawudo, Solu Khumbu, Nepal',
+      meta: '9 h &middot; 6 sessions',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: true,
+      reference: '',
+      transcriptSha256: ''
+    },
+    {
+      id: 'therapist',
+      title: 'Becoming Your Own Therapist',
+      teacher: 'Lama Thubten Yeshe',
+      date: '1975 &ndash; 1983',
+      place: 'Various centres',
+      meta: '22 h &middot; compiled',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: true,
+      reference: '',
+      transcriptSha256: ''
+    },
+    {
+      id: 'maitreya',
+      title: 'Universal Love: The Yoga Method of Buddha Maitreya',
+      teacher: 'Lama Thubten Yeshe',
+      date: 'March 1982',
+      place: 'Boulder Creek, California',
+      meta: '11 h &middot; 8 sessions',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: true,
+      reference: ''
+    },
+    {
+      id: 'vajrasattva',
+      title: 'Vajrasattva Retreat',
+      teacher: 'Lama Zopa Rinpoche',
+      date: 'February 1999',
+      place: 'Land of Medicine Buddha, California',
+      meta: '86 h &middot; 54 sessions',
+      formats: ['Audio'],
+      rightsCleared: true,
+      reference: ''
+    },
+    {
+      id: 'light-path',
+      title: 'Light of the Path Retreat',
+      teacher: 'Lama Zopa Rinpoche',
+      date: 'August 2009',
+      place: 'Black Mountain, North Carolina',
+      meta: '104 h &middot; 61 sessions',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: false,
+      reference: ''
+    },
+    {
+      id: 'mani',
+      title: 'Mani Retreat',
+      teacher: 'Lama Zopa Rinpoche',
+      date: 'April 2009',
+      place: 'Institut Vajra Yogini, France',
+      meta: '38 h &middot; 24 sessions',
+      formats: ['Transcript'],
+      rightsCleared: false,
+      reference: ''
+    }
+  ]
+};
+</script>
+<style>
+  html { color-scheme: light; }
+  body { background: #fdfaff; color: #1a0f20; font-family: Mulish, ui-sans-serif, system-ui, sans-serif; }
+  .mono { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+  .wave span { display:block; width:3px; border-radius:2px; background:#a24a89; opacity:.28; }
+  .wave span.on { opacity:.9; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<!-- ============ prototype notice ============ -->
+<div class="bg-warn text-warn-fg">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+    <span class="font-black uppercase tracking-wider text-xs">Prototype</span>
+    <span class="font-semibold">Lotus <span class="mono">/archive/fpmt</span></span>
+    <span class="opacity-80" id="proto-note">Sample data. Edit the CONFIG block at the top of this file to point it at real Swarm content.</span>
+  </div>
+</div>
+
+<!-- ============ gateway diagnostics (dev only) ============ -->
+<div id="diag" class="hidden border-b border-border bg-white">
+  <div class="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+    <details>
+      <summary class="cursor-pointer list-none text-sm font-bold text-text">
+        <span class="mr-2 inline-block rounded-full px-2 py-0.5 text-xs font-black uppercase tracking-wider" id="diag-pill">Checking&hellip;</span>
+        Swarm gateway check <span class="font-normal text-text-muted">&mdash; click to expand</span>
+      </summary>
+      <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" id="diag-grid"></div>
+      <div class="mono mt-3 whitespace-pre-wrap rounded-lg bg-muted p-3 text-xs leading-relaxed text-text" id="diag-log"></div>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <button id="diag-run" class="rounded-full bg-primary px-4 py-1.5 text-sm font-bold text-primary-foreground">Re-run check</button>
+        <span class="mono self-center text-xs text-text-muted" id="diag-target"></span>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============ header (replica of stage.joyfuleffort.com) ============ -->
+<header class="sticky top-0 z-40 border-b border-border/70 bg-white shadow-[0_2px_6px_-4px_rgb(0_0_0/0.16)]">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-20 xl:h-16 items-center justify-between gap-4">
+      <a href="#" class="flex shrink-0 items-center gap-2">
+        <span class="flex size-12 items-center justify-center overflow-hidden">
+          <svg viewBox="0 0 64 48" class="size-full" aria-hidden="true" fill="none" stroke="#a24a89" stroke-width="1.6" stroke-linejoin="round">
+            <path d="M32 6c4 6 5.5 12 5.5 18S35 40 32 43c-3-3-5.5-7-5.5-19S28 12 32 6Z"/>
+            <path d="M32 43c-5-1-11-5-13.5-11-1.4-3.4-1.6-7-1.2-9.6 3.2 1 8.4 4 11 8.6 2 3.6 3.2 8.4 3.7 12Z"/>
+            <path d="M32 43c5-1 11-5 13.5-11 1.4-3.4 1.6-7 1.2-9.6-3.2 1-8.4 4-11 8.6-2 3.6-3.2 8.4-3.7 12Z"/>
+            <path d="M32 43.5c-7-.5-14.5-3-18-8 3.5-2 9-2.6 13-1 2.4 1 4 3 5 9Z"/>
+            <path d="M32 43.5c7-.5 14.5-3 18-8-3.5-2-9-2.6-13-1-2.4 1-4 3-5 9Z"/>
+          </svg>
+        </span>
+        <span class="font-black text-3xl text-heading leading-none tracking-[0.015em]">lotus</span>
+      </a>
+
+      <form class="ml-auto hidden xl:flex mr-2 w-[30rem] h-10 items-center rounded-full border border-primary/20 bg-card p-1 shadow-sm" onsubmit="return false">
+        <div class="flex min-w-0 flex-[1.15] items-center gap-1.5 px-1.5">
+          <svg viewBox="0 0 24 24" class="size-3.5 shrink-0 text-text-muted" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" placeholder="Search events" class="w-full min-w-0 border-0 bg-transparent px-0 text-sm outline-none placeholder:text-text-muted">
+        </div>
+        <div class="h-5 w-px bg-border"></div>
+        <div class="flex min-w-0 flex-1 items-center gap-1.5 px-1.5">
+          <svg viewBox="0 0 24 24" class="size-3.5 shrink-0 text-text-muted" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+          <input type="search" placeholder="Your location" class="w-full min-w-0 border-0 bg-transparent px-0 text-sm outline-none placeholder:text-text-muted">
+        </div>
+        <button class="grid size-8 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground" aria-label="Search">
+          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+      </form>
+
+      <nav class="hidden xl:flex items-center gap-6 text-sm font-semibold text-text">
+        <a href="#" class="hover:text-primary">Events</a>
+        <a href="#" class="hover:text-primary">Courses</a>
+        <a href="#" class="text-primary">More</a>
+        <span class="rounded-full border border-border px-3 py-1.5 text-text-muted">English</span>
+        <a href="#" class="text-text-muted hover:text-primary">Account</a>
+      </nav>
+      <button class="xl:hidden grid size-10 place-items-center text-primary" aria-label="Menu">
+        <svg viewBox="0 0 24 24" class="size-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="mx-auto max-w-7xl">
+  <article class="px-6 pb-16 sm:px-10 lg:px-16">
+
+    <!-- breadcrumb -->
+    <nav class="pt-6 text-sm text-text-muted flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+      <a href="#" class="hover:text-primary">Organizations</a>
+      <span aria-hidden="true">/</span>
+      <a href="#" class="hover:text-primary">FPMT Network</a>
+      <span aria-hidden="true">/</span>
+      <span class="font-semibold text-text">Archive</span>
+    </nav>
+
+    <!-- hero band -->
+    <div class="mt-5 flex h-56 w-full items-center justify-center overflow-hidden rounded-[0.75rem] bg-muted sm:h-72 lg:h-80">
+      <svg viewBox="0 0 64 48" class="h-full w-full p-12 sm:p-16" aria-hidden="true" fill="none" stroke="#a24a89" stroke-width="0.7" stroke-linejoin="round" opacity=".55">
+        <path d="M32 6c4 6 5.5 12 5.5 18S35 40 32 43c-3-3-5.5-7-5.5-19S28 12 32 6Z"/>
+        <path d="M32 43c-5-1-11-5-13.5-11-1.4-3.4-1.6-7-1.2-9.6 3.2 1 8.4 4 11 8.6 2 3.6 3.2 8.4 3.7 12Z"/>
+        <path d="M32 43c5-1 11-5 13.5-11 1.4-3.4 1.6-7 1.2-9.6-3.2 1-8.4 4-11 8.6-2 3.6-3.2 8.4-3.7 12Z"/>
+        <path d="M32 43.5c-7-.5-14.5-3-18-8 3.5-2 9-2.6 13-1 2.4 1 4 3 5 9Z"/>
+        <path d="M32 43.5c7-.5 14.5-3 18-8-3.5-2-9-2.6-13-1-2.4 1-4 3-5 9Z"/>
+      </svg>
+    </div>
+
+    <div class="pt-7">
+      <header class="pb-6">
+        <h1 class="font-black text-4xl tracking-tight text-foreground">Teaching Archive</h1>
+        <p class="mt-3 max-w-2xl text-text-muted">Recorded teachings preserved by the FPMT network, stored on Swarm so
+          the record of what was taught cannot be quietly altered or lost with any single organisation.</p>
+      </header>
+
+      <div class="flex items-center gap-4 pb-6">
+        <span class="grid size-16 shrink-0 place-items-center rounded-full border border-border bg-background p-2 font-black text-brand-deep shadow-sm sm:size-20">FN</span>
+        <div class="min-w-0">
+          <div class="font-medium text-text">FPMT Network</div>
+          <div class="text-sm text-text-muted">Organization &middot; 130+ centres in 40 countries</div>
+        </div>
+      </div>
+
+      <!-- org tab bar, Archive active -->
+      <nav class="mt-2 overflow-x-auto border-b border-border pb-px [scrollbar-width:none]" aria-label="Organization directory pages">
+        <div class="flex w-max min-w-full items-stretch justify-around gap-10 sm:gap-14 lg:gap-20">
+          <a href="#" class="relative inline-flex shrink-0 items-center gap-2 px-1 pb-4 text-sm font-semibold text-text hover:text-primary">
+            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>About</a>
+          <a href="#" class="relative inline-flex shrink-0 items-center gap-2 px-1 pb-4 text-sm font-semibold text-text hover:text-primary">
+            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>Events</a>
+          <a href="#" class="relative inline-flex shrink-0 items-center gap-2 px-1 pb-4 text-sm font-semibold text-text hover:text-primary">
+            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg>Teachers</a>
+          <a href="#" class="relative inline-flex shrink-0 items-center gap-2 px-1 pb-4 text-sm font-semibold text-text hover:text-primary">
+            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M10 21v-6h4v6"/></svg>Centres</a>
+          <a href="#" class="relative inline-flex shrink-0 items-center gap-2 px-1 pb-4 text-sm font-semibold text-text hover:text-primary">
+            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Venues</a>
+          <a href="#" aria-current="page" class="relative inline-flex shrink-0 items-center gap-2 px-1 pb-4 text-sm font-semibold text-primary after:absolute after:-inset-x-4 after:bottom-0 after:h-0.5 after:bg-primary">
+            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect width="20" height="5" x="2" y="4" rx="1"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M10 13h4"/></svg>Archive</a>
+        </div>
+      </nav>
+
+      <!-- stats -->
+      <dl class="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-4">
+        <div class="bg-card p-4 sm:p-5">
+          <dt class="text-sm text-text-muted">Teachings preserved</dt>
+          <dd class="mt-1 font-black text-2xl text-foreground tabular-nums" id="stat-preserved">0<span class="text-base font-bold text-text-muted"> / 2,100</span></dd>
+        </div>
+        <div class="bg-card p-4 sm:p-5">
+          <dt class="text-sm text-text-muted">Hours of audio</dt>
+          <dd class="mt-1 font-black text-2xl text-foreground tabular-nums" id="stat-hours">0</dd>
+        </div>
+        <div class="bg-card p-4 sm:p-5">
+          <dt class="text-sm text-text-muted">Stored on</dt>
+          <dd class="mt-1 font-black text-2xl text-foreground" id="stat-where">&mdash;</dd>
+        </div>
+        <div class="bg-card p-4 sm:p-5">
+          <dt class="text-sm text-text-muted">Source archive</dt>
+          <dd class="mt-1 font-black text-2xl text-foreground">LYWA</dd>
+        </div>
+      </dl>
+
+      <!-- filters -->
+      <div class="mt-8 flex flex-wrap items-center gap-2">
+        <button class="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">All teachings</button>
+        <button class="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-text hover:border-primary/30 hover:text-primary">Lama Thubten Yeshe</button>
+        <button class="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-text hover:border-primary/30 hover:text-primary">Lama Zopa Rinpoche</button>
+        <span class="mx-1 hidden h-5 w-px bg-border sm:block"></span>
+        <button class="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-text hover:border-primary/30 hover:text-primary">Audio</button>
+        <button class="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-text hover:border-primary/30 hover:text-primary">Transcript</button>
+        <span class="mx-1 hidden h-5 w-px bg-border sm:block"></span>
+        <button class="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-text hover:border-primary/30 hover:text-primary">1970s</button>
+        <button class="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-text hover:border-primary/30 hover:text-primary">1990s</button>
+        <button class="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-text hover:border-primary/30 hover:text-primary">2000s</button>
+      </div>
+
+      <!-- ============ featured record: the detail view ============ -->
+      <h2 class="mt-12 font-black text-2xl text-heading">Recently preserved</h2>
+
+      <section class="mt-4 overflow-hidden rounded-2xl border border-border bg-card shadow-md">
+        <div class="grid lg:grid-cols-[1.35fr_1fr]">
+
+          <div class="p-5 sm:p-7">
+            <div class="flex flex-wrap items-center gap-2" id="feat-chips"></div>
+
+            <h3 class="mt-4 font-black text-2xl leading-tight text-foreground sm:text-3xl" id="feat-title">&nbsp;</h3>
+            <p class="mt-1 font-semibold text-text" id="feat-teacher">&nbsp;</p>
+
+            <ul class="mt-4 flex flex-col gap-2 text-sm">
+              <li class="flex items-start gap-3">
+                <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-text-muted" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                <span class="font-semibold text-text" id="feat-date"></span></li>
+              <li class="flex items-start gap-3">
+                <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-text-muted" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+                <span class="text-text-muted" id="feat-place"></span></li>
+              <li class="flex items-start gap-3">
+                <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-text-muted" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <span class="text-text-muted" id="feat-meta"></span></li>
+            </ul>
+
+            <!-- player: real <audio>, styled controls. Click the waveform to seek. -->
+            <div class="mt-6 rounded-xl border border-border bg-background p-4">
+              <audio id="audio" preload="metadata" class="hidden"></audio>
+              <div class="flex items-center gap-4">
+                <button id="play" class="grid size-11 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground shadow-sm disabled:opacity-40" aria-label="Play">
+                  <svg id="icon-play" viewBox="0 0 24 24" class="size-5 translate-x-px" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  <svg id="icon-pause" viewBox="0 0 24 24" class="hidden size-5" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+                </button>
+                <div class="min-w-0 flex-1">
+                  <div class="wave flex h-9 cursor-pointer items-center gap-[2px]" id="wave" role="slider" tabindex="0"
+                       aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+                </div>
+              </div>
+              <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-text-muted">
+                <span class="mono tabular-nums" id="feat-time">00:00 / --:--</span>
+                <span id="feat-audio-note">32 kbps Opus</span>
+              </div>
+            </div>
+
+            <!-- transcript -->
+            <div class="mt-5">
+              <div class="flex items-center justify-between gap-3">
+                <h4 class="font-black text-sm uppercase tracking-wider text-text-muted">Transcript</h4>
+                <span class="text-xs text-text-muted" id="feat-tr-meta">Unedited, as transcribed</span>
+              </div>
+              <div id="transcript-box" class="relative mt-2 max-h-40 overflow-hidden rounded-xl border border-border bg-background p-4 text-sm leading-relaxed text-text">
+                <div id="feat-transcript"></div>
+                <div id="transcript-fade" class="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-background to-transparent"></div>
+              </div>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <button id="btn-more" type="button" aria-expanded="false" aria-controls="transcript-box"
+                        class="hidden items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">
+                  <svg id="icon-more" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  <span id="btn-more-label">Read full transcript</span>
+                </button>
+                <a id="feat-source" href="#" class="rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-text hover:border-primary/30 hover:text-primary">Read on lamayeshe.com</a>
+                <a id="feat-download" href="#" class="rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-text hover:border-primary/30 hover:text-primary">Download transcript</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- provenance rail -->
+          <aside class="border-t border-border bg-sidebar p-5 sm:p-7 lg:border-l lg:border-t-0">
+            <h4 class="font-black text-sm uppercase tracking-wider text-brand-deep">Provenance</h4>
+
+            <dl class="mt-4 flex flex-col gap-4 text-sm">
+              <div>
+                <dt class="text-text-muted">Swarm reference</dt>
+                <dd class="mono mt-1 break-all rounded-lg border border-border bg-card p-2.5 text-xs leading-relaxed text-text" id="feat-ref"></dd>
+                <p class="mt-1.5 text-xs text-text-muted" id="feat-ref-note"></p>
+              </div>
+              <div>
+                <dt class="flex items-center gap-1.5 text-text-muted">
+                  Resolves at
+                  <span class="group relative inline-flex">
+                    <button type="button" aria-label="How to read this without a gateway"
+                            aria-describedby="tip-gateway"
+                            class="grid size-5 place-items-center rounded-full text-text-muted transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                      <!-- a file coming apart into chunks: what Swarm actually does to it -->
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M13.5 2.5H6a1.5 1.5 0 0 0-1.5 1.5v16A1.5 1.5 0 0 0 6 21.5h4"/>
+                        <path d="M13.5 2.5 19 8v3"/>
+                        <rect x="13" y="13" width="4" height="4" rx="0.6"/>
+                        <rect x="18.5" y="15.5" width="3.2" height="3.2" rx="0.6"/>
+                        <rect x="14.5" y="19" width="3.2" height="3.2" rx="0.6"/>
+                      </svg>
+                    </button>
+                    <span id="tip-gateway" role="tooltip"
+                          class="pointer-events-none invisible absolute left-1/2 top-full z-30 mt-2 w-72 -translate-x-1/2 rounded-xl border border-border bg-card p-3 text-xs font-normal leading-relaxed text-text opacity-0 shadow-lg transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                      This teaching is split into pieces and spread across the Swarm network. A gateway like
+                      <span class="mono">bzz.link</span> reassembles those pieces for you, which is convenient
+                      &mdash; but it is still someone else&rsquo;s server in the middle.
+                      <span class="mt-2 block">Run your own Bee node and there is no middle:
+                      your machine pulls the pieces straight from the network and checks them itself.
+                      <strong class="font-semibold">Swarm Desktop</strong> is the easiest way to do that, and the
+                      same reference then works at <span class="mono">localhost:1633</span>.</span>
+                    </span>
+                  </span>
+                </dt>
+                <dd class="mono mt-1 break-all text-xs text-text" id="feat-url"></dd>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <dt class="text-text-muted">Batch type</dt>
+                  <dd class="mt-1 font-semibold text-text">Immutable</dd>
+                </div>
+                <div>
+                  <dt class="text-text-muted">Audio size</dt>
+                  <dd class="mt-1 font-semibold text-text tabular-nums" id="feat-size">&mdash;</dd>
+                </div>
+              </div>
+              <div>
+                <dt class="text-text-muted">Postage batch</dt>
+                <dd class="mono mt-1 break-all rounded-lg border border-border bg-card p-2.5 text-xs leading-relaxed text-text" id="feat-stamp">&mdash;</dd>
+                <p class="mt-1.5 text-xs text-text-muted" id="feat-stamp-note"></p>
+              </div>
+              <div>
+                <dt class="text-text-muted">Paid for by</dt>
+                <dd class="mt-1 font-semibold text-text">MetaProvide</dd>
+                <p class="mt-1.5 text-xs text-text-muted">MetaProvide buys the postage batch and funds the top-ups that
+                  keep it alive, as a contribution to the archive. It is not a charge to the centres or to LYWA.</p>
+              </div>
+              <div>
+                <dt class="text-text-muted">Storage funded through</dt>
+                <dd class="mt-1 font-semibold text-text" id="feat-funded">&mdash; not yet committed</dd>
+                <p class="mt-1.5 text-xs text-text-muted" id="feat-funded-note">Swarm storage is rent, not an
+                  endowment. A batch holds a balance that drains over time, so this date is what keeps
+                  &ldquo;preserved&rdquo; from becoming a promise nobody is keeping.</p>
+              </div>
+              <div id="feat-util-row" class="hidden">
+                <dt class="text-text-muted">Batch used</dt>
+                <dd class="mt-1 font-semibold text-text tabular-nums" id="feat-util">&mdash;</dd>
+              </div>
+            </dl>
+
+            <div class="mt-5 flex flex-col gap-2">
+              <button id="btn-copy" class="flex items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-text hover:border-primary/30 hover:text-primary">
+                <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>
+                Copy reference</button>
+              <button id="btn-verify" class="flex items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-text hover:border-primary/30 hover:text-primary">
+                <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
+                Verify transcript</button>
+              <p id="verify-out" class="mono hidden rounded-lg bg-card p-2.5 text-xs leading-relaxed"></p>
+            </div>
+
+            <div class="mt-6 border-t border-border pt-4">
+              <h4 class="font-black text-sm uppercase tracking-wider text-brand-deep">Related in Lotus</h4>
+              <ul class="mt-3 flex flex-col gap-2 text-sm">
+                <li><a href="#" class="flex items-center gap-2 font-semibold text-primary hover:underline">
+                  <svg viewBox="0 0 24 24" class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Lama Thubten Yeshe</a></li>
+                <li><a href="#" class="flex items-center gap-2 font-semibold text-primary hover:underline">
+                  <svg viewBox="0 0 24 24" class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Lama Zopa Rinpoche</a></li>
+                <li><a href="#" class="flex items-center gap-2 font-semibold text-primary hover:underline">
+                  <svg viewBox="0 0 24 24" class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                  Discovering Buddhism &mdash; Module 1</a></li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============ grid ============ -->
+      <div class="mt-12 flex flex-wrap items-baseline justify-between gap-3">
+        <h2 class="font-black text-2xl text-heading">All teachings</h2>
+        <span class="text-sm text-text-muted">7 records &middot; sorted by date taught</span>
+      </div>
+
+      <ul class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" id="grid"></ul>
+
+      <!-- ============ how it works ============ -->
+      <section class="mt-14 rounded-2xl border border-border bg-card p-6 shadow-md sm:p-8">
+        <h2 class="font-black text-2xl text-heading">How preservation works</h2>
+        <div class="mt-5 grid gap-6 sm:grid-cols-3">
+          <div>
+            <div class="grid size-9 place-items-center rounded-full bg-accent text-accent-foreground">
+              <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m7 11 5-5 5 5"/><path d="M12 6v12"/></svg>
+            </div>
+            <h3 class="mt-3 font-black text-base text-foreground">Addressed by what it contains</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-text-muted">Each teaching goes up as one folder &mdash; audio,
+              transcript, metadata &mdash; and gets a single address calculated from the contents themselves. Change one
+              character of the transcript and the address changes with it. Anyone can resolve that address without
+              Lotus and without the source archive, which is what makes it a citation rather than a link.</p>
+          </div>
+          <div>
+            <div class="grid size-9 place-items-center rounded-full bg-accent text-accent-foreground">
+              <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6h7M6 8.5v7M18 8.5v7M8.5 18h7"/></svg>
+            </div>
+            <h3 class="mt-3 font-black text-base text-foreground">Split up and spread across the network</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-text-muted">The teaching is not filed on one server. Swarm
+              cuts it into 4&nbsp;KB pieces and scatters them across thousands of independent nodes worldwide, each
+              piece landing near nodes whose addresses are closest to its own. Every piece is held by several nodes at
+              once, and the network keeps replacing copies as machines come and go. Losing the teaching would take a
+              large, simultaneous failure across the whole network &mdash; not one company shutting down, one server
+              dying, or one budget being cut.</p>
+          </div>
+          <div>
+            <div class="grid size-9 place-items-center rounded-full bg-accent text-accent-foreground">
+              <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect width="20" height="5" x="2" y="4" rx="1"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M10 13h4"/></svg>
+            </div>
+            <h3 class="mt-3 font-black text-base text-foreground">One stamp keeps it all alive</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-text-muted">Every file in the archive is covered by a single
+              prepaid <em>postage batch</em> &mdash; the stamp shown above. Storage is rent, not an endowment: the
+              batch holds a balance that drains a little with every block, and when it empties the nodes holding those
+              pieces are free to discard them. So the archive stays alive by being topped up. MetaProvide pays for
+              that, and every record shows the date it is funded through, because a preservation promise with no
+              funding date behind it is not a promise.</p>
+          </div>
+        </div>
+        <p class="mt-6 text-sm leading-relaxed text-text-muted">
+          Two consequences worth being plain about. Because the address comes from the content, the archive is
+          <strong class="font-semibold text-text">tamper-evident rather than tamper-proof</strong> &mdash; nobody can
+          alter a teaching in place, but a new version is simply a different address. And because a stamp can lapse,
+          <strong class="font-semibold text-text">&ldquo;permanent&rdquo; is a word we avoid</strong>; what Swarm
+          actually buys is independence from any single organisation, including ours.
+        </p>
+        <p class="mt-6 rounded-xl bg-muted p-4 text-sm leading-relaxed text-text">
+          <strong class="font-black">Nothing about a person is stored here.</strong> The archive holds published
+          teachings only. Registrations, attendance and any record identifying a living participant stay in Lotus,
+          where they can be corrected, exported and erased.
+        </p>
+      </section>
+    </div>
+  </article>
+</main>
+
+<footer class="border-t border-border bg-white">
+  <div class="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-16">
+    <p class="text-sm text-text-muted">Lotus. All rights reserved.</p>
+    <p class="mt-2 text-xs text-text-muted">Prototype for internal discussion. Teaching titles are drawn from the Lama
+      Yeshe Wisdom Archive catalogue; nothing on this page has been uploaded to Swarm, and no agreement with LYWA is
+      in place.</p>
+  </div>
+</footer>
+
+<script>
+/* ---------------------------------------------------------------------------
+   Wiring. You should not need to edit below this line -- everything
+   configurable lives in the CONFIG block at the top of the file.
+   ------------------------------------------------------------------------- */
+
+const gw   = () => CONFIG.GATEWAY.replace(/\/+$/, '');
+const bzz  = (ref, path) => gw() + '/bzz/' + ref + '/' + (path || '');
+const $    = (id) => document.getElementById(id);
+const esc  = (s) => String(s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+
+// A record is "preserved" only once it actually has a reference.
+const stateOf = (r) => !r.reference ? (r.rightsCleared ? 'queued' : 'rights') : 'preserved';
+
+const CHIPS = {
+  preserved: ['bg-ok text-ok-fg', 'Preserved'],
+  queued:    ['bg-muted text-text-muted', 'Queued for upload'],
+  rights:    ['bg-warn text-warn-fg', 'Awaiting rights clearance']
+};
+
+/* ---------- header note + stats reflect reality ---------- */
+(function () {
+  const live = CONFIG.records.filter(r => r.reference);
+  $('proto-note').innerHTML = live.length
+    ? 'Pointing at <b>' + gw() + '</b> &middot; ' + live.length + ' of ' + CONFIG.records.length + ' records have a real reference.'
+    : 'No reference set yet. Paste a collection reference into CONFIG.records at the top of this file.';
+
+  // Stats are derived, never hand-written: a preserved count that drifts from
+  // what is actually on Swarm is exactly the kind of claim this page exists to
+  // avoid making.
+  $('stat-preserved').innerHTML =
+    live.length + '<span class="text-base font-bold text-text-muted"> / 2,100</span>';
+
+  const secs = live.reduce((n, r) => n + (r.durationSeconds || 0), 0);
+  $('stat-hours').textContent = secs
+    ? (secs / 3600 < 10 ? (secs / 3600).toFixed(1) : Math.round(secs / 3600))
+    : '0';
+
+  let where = '&mdash;';
+  if (live.length) {
+    const host = gw();
+    where = /localhost|127\.0\.0\.1/.test(host)
+      ? '<span class="text-warn-fg">Local node</span>'
+      : 'Swarm';
+  }
+  $('stat-where').innerHTML = where;
+})();
+
+/* ---------- featured record ---------- */
+const feat = CONFIG.records.find(r => r.id === CONFIG.FEATURED) || CONFIG.records[0];
+
+(function renderFeatured() {
+  const state = stateOf(feat);
+  const [chipClass, chipLabel] = CHIPS[state];
+
+  $('feat-chips').innerHTML =
+    '<span class="rounded-full px-2.5 py-1 text-xs font-bold ' + chipClass + '">' + chipLabel + '</span>' +
+    feat.formats.map(f => '<span class="rounded-full bg-accent px-2.5 py-1 text-xs font-bold text-accent-foreground">' + f + '</span>').join('') +
+    '<span class="rounded-full bg-muted px-2.5 py-1 text-xs font-bold text-text-muted">Free distribution</span>';
+
+  $('feat-title').innerHTML   = feat.title;
+  $('feat-teacher').innerHTML = feat.teacher;
+  $('feat-date').innerHTML    = feat.date;
+  $('feat-place').innerHTML   = feat.place;
+  $('feat-meta').innerHTML    = feat.meta;
+  if (feat.sourceUrl) $('feat-source').href = feat.sourceUrl;
+
+  if (!feat.reference) {
+    $('feat-ref').textContent = '(no reference set)';
+    $('feat-ref-note').innerHTML = 'Paste the 64-character collection reference into <span class="mono">CONFIG.records</span>.';
+    $('feat-url').textContent = '--';
+    $('feat-transcript').innerHTML =
+      '<p class="text-xs font-bold uppercase tracking-wider text-text-muted">Placeholder</p>' +
+      '<p class="mt-2">Once a reference is set, this panel loads <span class="mono">' + CONFIG.FILES.transcript +
+      '</span> straight from the collection, and the player above streams <span class="mono">' + CONFIG.FILES.audio +
+      '</span> from the same reference -- so the audio and the text can never drift apart.</p>';
+    $('play').disabled = true;
+    return;
+  }
+
+  const audioUrl = bzz(feat.reference, CONFIG.FILES.audio);
+  const trUrl    = bzz(feat.reference, CONFIG.FILES.transcript);
+
+  $('feat-ref').textContent = feat.reference;
+  $('feat-ref-note').textContent = 'Content-addressed. Any Bee node holding this data resolves the same bytes for this reference.';
+  $('feat-url').textContent = bzz(feat.reference, '');
+  if (feat.stamp) {
+    $('feat-stamp').textContent = feat.stamp;
+    $('feat-stamp-note').textContent = feat.stampNote || '';
+    loadStampTTL(feat.stamp);
+  }
+  $('feat-download').href = trUrl;
+  $('audio').src = audioUrl;
+
+  // transcript
+  $('feat-transcript').innerHTML = '<p class="text-text-muted">Loading transcript...</p>';
+  fetch(trUrl)
+    .then(r => r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)))
+    .then(t => {
+      // Render the whole transcript. The box clamps it visually; "Read full
+      // transcript" just lifts the clamp, so expanding costs no second request.
+      const paras = t.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+      $('feat-transcript').innerHTML = paras
+        .map(p => '<p class="mt-2 first:mt-0">' + esc(p) + '</p>').join('');
+      const words = t.trim().split(/\s+/).length;
+      $('feat-tr-meta').innerHTML =
+        'Unedited, as transcribed &middot; ' + words.toLocaleString() + ' words';
+      $('btn-more').classList.remove('hidden');
+      $('btn-more').classList.add('inline-flex');
+    })
+    .catch(e => {
+      $('feat-transcript').innerHTML =
+        '<p class="text-warn-fg"><b>Could not load the transcript.</b> ' + esc(e.message) + '</p>' +
+        '<p class="mt-2 text-text-muted">Usually CORS: the gateway did not send ' +
+        '<span class="mono">Access-Control-Allow-Origin</span>. Audio playback below can still work, ' +
+        'because media elements do not need CORS. See the gateway check at the top of the page.</p>';
+    });
+
+  // Audio size comes from our own metadata.json, not from gateway headers.
+  // Gateways differ in what they report (bzz.link answers HEAD with a partial
+  // response), and metadata.json carries the exact byte count we recorded
+  // before upload, so it is both more accurate and gateway-independent.
+  fetch(bzz(feat.reference, CONFIG.FILES.metadata))
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+    .then(m => {
+      const bytes = m && m.files && m.files[CONFIG.FILES.audio] && m.files[CONFIG.FILES.audio].bytes;
+      if (bytes) $('feat-size').textContent = (bytes / 1048576).toFixed(1) + ' MB';
+    })
+    .catch(() => { $('feat-size').textContent = 'unknown'; });
+})();
+
+/* ---------- postage batch: how much life is left on the stamp ----------
+   Reads batchTTL (seconds remaining) from GET /stamps/{batchID} and turns it
+   into the funded-through date.
+
+   IN PRODUCTION THIS CALL MUST NOT COME FROM THE BROWSER. The /stamps family
+   also contains buy, topup and dilute, which spend BZZ from the node's wallet,
+   so the public gateway has to block /stamps entirely (see the build plan).
+   Lotus reads the TTL server-side and stores it on the record; the browser
+   only ever sees the resulting date. This direct call works here because the
+   POC talks to a local dev node.                                            */
+function ownGateway() {
+  let host;
+  try { host = new URL(gw(), location.href).hostname.toLowerCase(); } catch (e) { return false; }
+  return CONFIG.OWN_GATEWAY_HOSTS.some(h => host.includes(h.toLowerCase()));
+}
+
+async function loadStampTTL(batchID) {
+  const dd = $('feat-funded'), note = $('feat-funded-note');
+  const RENT = 'Swarm storage is rent, not an endowment: the batch balance drains every block, ' +
+               'so this date is what keeps "preserved" from becoming a promise nobody is keeping.';
+
+  // Public gateway: /stamps is blocked there and should be. Say what will
+  // happen in production rather than showing a broken or invented value.
+  if (!ownGateway()) {
+    dd.innerHTML = '<span class="text-text-muted">not available through this gateway</span>';
+    note.innerHTML =
+      'Batch life is read from the node that holds the postage batch, and public gateways block that endpoint ' +
+      '&mdash; correctly, since the same endpoint family can spend BZZ. <strong class="font-semibold text-text">In ' +
+      'production Lotus reads it server-side from our own Bee node and shows the funded-through date here.</strong> ' +
+      'The teaching itself still resolves through any gateway, which is the whole point of a content address. ' + RENT;
+    $('feat-util-row').classList.add('hidden');
+    return;
+  }
+
+  try {
+    const r = await fetch(gw() + '/stamps/' + batchID);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const b = await r.json();
+
+    if (typeof b.batchTTL !== 'number' || b.batchTTL < 0) throw new Error('no TTL reported');
+
+    const until = new Date(Date.now() + b.batchTTL * 1000);
+    const days = b.batchTTL / 86400;
+    const human = days < 2
+      ? Math.round(b.batchTTL / 3600) + ' hours'
+      : (days < 60 ? Math.round(days) + ' days'
+                   : (days < 730 ? Math.round(days / 30.44) + ' months'
+                                 : (days / 365.25).toFixed(1) + ' years'));
+
+    dd.innerHTML = until.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) +
+      ' <span class="font-normal ' + (days < 30 ? 'text-warn-fg' : 'text-text-muted') + '">(' + human + ' left)</span>';
+    note.textContent = days < 30
+      ? 'Read live from the batch. Under a month remaining - without a top-up the nodes holding these chunks are free to discard them. ' + RENT
+      : 'Read live from the batch. ' + RENT;
+
+    if (typeof b.utilizationRatio === 'number') {
+      $('feat-util-row').classList.remove('hidden');
+      $('feat-util').textContent = (b.utilizationRatio * 100).toFixed(1) + '% of depth ' + b.depth +
+        (b.immutableFlag ? ' (immutable)' : ' (mutable)');
+    }
+  } catch (e) {
+    // Never invent a date. An unknown TTL is reported as unknown.
+    dd.innerHTML = '<span class="text-text-muted">unknown</span>';
+    note.textContent = 'Could not read the batch (' + e.message + '). ' +
+      'A production gateway blocks /stamps from the browser by design, so Lotus reads this server-side. ' + RENT;
+  }
+}
+
+/* ---------- player: styled controls over a real <audio> ---------- */
+(function player() {
+  const audio = $('audio'), wave = $('wave'), playBtn = $('play');
+  const BARS = 120;
+  let seed = 7;
+  const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+
+  const bars = [];
+  for (let i = 0; i < BARS; i++) {
+    const b = document.createElement('span');
+    b.style.height = (14 + rnd() * 22).toFixed(0) + 'px';
+    wave.appendChild(b);
+    bars.push(b);
+  }
+
+  const fmt = (s) => {
+    if (!isFinite(s)) return '--:--';
+    s = Math.floor(s);
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+    const pad = (n) => String(n).padStart(2, '0');
+    return (h ? h + ':' + pad(m) : pad(m)) + ':' + pad(x);
+  };
+
+  const paint = () => {
+    const pct = audio.duration ? audio.currentTime / audio.duration : 0;
+    const upto = Math.round(pct * BARS);
+    bars.forEach((b, i) => b.classList.toggle('on', i < upto));
+    $('feat-time').textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+    wave.setAttribute('aria-valuenow', Math.round(pct * 100));
+  };
+
+  playBtn.addEventListener('click', () => audio.paused ? audio.play() : audio.pause());
+  audio.addEventListener('play',  () => { $('icon-play').classList.add('hidden'); $('icon-pause').classList.remove('hidden'); });
+  audio.addEventListener('pause', () => { $('icon-pause').classList.add('hidden'); $('icon-play').classList.remove('hidden'); });
+  audio.addEventListener('timeupdate', paint);
+  audio.addEventListener('loadedmetadata', paint);
+  audio.addEventListener('error', () => {
+    $('feat-audio-note').innerHTML = '<span class="text-warn-fg font-bold">Audio failed to load</span>';
+  });
+
+  // Click to seek -- this is the range-request test.
+  const seek = (clientX) => {
+    if (!audio.duration) return;
+    const r = wave.getBoundingClientRect();
+    audio.currentTime = Math.max(0, Math.min(1, (clientX - r.left) / r.width)) * audio.duration;
+  };
+  wave.addEventListener('click', (e) => seek(e.clientX));
+  wave.addEventListener('keydown', (e) => {
+    if (!audio.duration) return;
+    if (e.key === 'ArrowRight') { audio.currentTime += 15; e.preventDefault(); }
+    if (e.key === 'ArrowLeft')  { audio.currentTime -= 15; e.preventDefault(); }
+    if (e.key === ' ')          { audio.paused ? audio.play() : audio.pause(); e.preventDefault(); }
+  });
+  paint();
+})();
+
+/* ---------- transcript: read it here, in full ---------- */
+(function transcriptToggle() {
+  const btn = $('btn-more'), box = $('transcript-box'),
+        fade = $('transcript-fade'), label = $('btn-more-label'), icon = $('icon-more');
+  btn.addEventListener('click', () => {
+    const open = box.classList.toggle('max-h-40');   // present = clamped
+    const expanded = !open;
+    box.classList.toggle('overflow-hidden', !expanded);
+    fade.classList.toggle('hidden', expanded);
+    label.textContent = expanded ? 'Show less' : 'Read full transcript';
+    icon.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+    if (!expanded) box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+})();
+
+/* ---------- copy + verify ---------- */
+$('btn-copy').addEventListener('click', async () => {
+  if (!feat.reference) return;
+  try {
+    await navigator.clipboard.writeText(feat.reference);
+    $('btn-copy').lastChild.textContent = ' Copied';
+    setTimeout(() => { $('btn-copy').lastChild.textContent = ' Copy reference'; }, 1500);
+  } catch (e) { /* clipboard blocked outside a secure context */ }
+});
+
+/*  What "verify" means here: Lotus (this page) stores a sha256 captured BEFORE
+    upload. We re-download the file and recompute it. This does not verify Swarm
+    -- Swarm addresses are already content-derived -- it verifies that what this
+    page CLAIMS still matches what the gateway actually serves. That catches a
+    swapped reference, an edited record, or a lying gateway.                  */
+$('btn-verify').addEventListener('click', async () => {
+  const out = $('verify-out');
+  out.classList.remove('hidden');
+  if (!feat.reference) { out.className = 'mono rounded-lg bg-card p-2.5 text-xs text-text-muted'; out.textContent = 'No reference set.'; return; }
+  if (!window.crypto || !crypto.subtle) {
+    out.className = 'mono rounded-lg bg-warn p-2.5 text-xs text-warn-fg';
+    out.textContent = 'crypto.subtle needs a secure context. Serve over http://localhost or https, not file://.';
+    return;
+  }
+  out.className = 'mono rounded-lg bg-card p-2.5 text-xs text-text-muted';
+  out.textContent = 'Downloading and hashing ' + CONFIG.FILES.transcript + '...';
+  try {
+    const buf  = await (await fetch(bzz(feat.reference, CONFIG.FILES.transcript))).arrayBuffer();
+    const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', buf))]
+      .map(b => b.toString(16).padStart(2, '0')).join('');
+    if (!feat.transcriptSha256) {
+      out.className = 'mono rounded-lg bg-muted p-2.5 text-xs text-text';
+      out.textContent = 'sha256 = ' + hash + '\n\nNo expected hash recorded. Put this value in transcriptSha256 to make future checks meaningful.';
+    } else if (hash === feat.transcriptSha256.toLowerCase()) {
+      out.className = 'mono rounded-lg bg-ok p-2.5 text-xs text-ok-fg';
+      out.textContent = 'MATCH -- the served file is byte-identical to the one recorded at upload.';
+    } else {
+      out.className = 'mono rounded-lg bg-warn p-2.5 text-xs text-warn-fg';
+      out.textContent = 'MISMATCH\nexpected ' + feat.transcriptSha256 + '\ngot      ' + hash;
+    }
+  } catch (e) {
+    out.className = 'mono rounded-lg bg-warn p-2.5 text-xs text-warn-fg';
+    out.textContent = 'Fetch failed: ' + e.message + '\nLikely CORS, or the gateway is unreachable.';
+  }
+});
+
+/* ---------- record grid ---------- */
+const icon = (d) => '<svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-text-muted" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+const calIcon = icon('<path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>');
+const pinIcon = icon('<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>');
+const clkIcon = icon('<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>');
+
+$('grid').innerHTML = CONFIG.records.map(r => {
+  const [chipClass, chipLabel] = CHIPS[stateOf(r)];
+  const ref = r.reference
+    ? '<div class="mono mt-4 truncate border-t border-border/60 pt-3 text-xs text-text-muted">bzz / ' + r.reference.slice(0, 8) + '...' + r.reference.slice(-6) + '</div>'
+    : '<div class="mt-4 border-t border-border/60 pt-3 text-xs text-text-muted">No reference yet</div>';
+  const href = r.reference ? bzz(r.reference, '') : '#';
+  return '<li class="h-full min-w-0">' +
+    '<a href="' + href + '" class="group block h-full rounded-2xl">' +
+    '<div class="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card py-0 shadow-md transition-[border-color,box-shadow] group-hover:border-primary/30 group-hover:shadow-lg">' +
+      '<div class="flex flex-col gap-3 p-4">' +
+        '<div class="flex flex-wrap items-center gap-1.5">' +
+          '<span class="rounded-full px-2.5 py-1 text-xs font-bold ' + chipClass + '">' + chipLabel + '</span>' +
+          r.formats.map(f => '<span class="rounded-full bg-accent px-2.5 py-1 text-xs font-bold text-accent-foreground">' + f + '</span>').join('') +
+        '</div>' +
+        '<h3 class="line-clamp-2 break-words font-black text-xl leading-tight text-foreground">' + r.title + '</h3>' +
+        '<p class="font-semibold text-sm text-text">' + r.teacher + '</p>' +
+      '</div>' +
+      '<div class="flex flex-1 flex-col justify-end p-4 pt-0">' +
+        '<ul class="flex flex-col gap-2 text-sm">' +
+          '<li class="flex min-w-0 items-start gap-3">' + calIcon + '<span class="font-semibold text-text">' + r.date + '</span></li>' +
+          '<li class="flex min-w-0 items-start gap-3">' + pinIcon + '<span class="break-words text-text-muted">' + r.place + '</span></li>' +
+          '<li class="flex min-w-0 items-start gap-3">' + clkIcon + '<span class="text-text-muted">' + r.meta + '</span></li>' +
+        '</ul>' + ref +
+      '</div></div></a></li>';
+}).join('');
+
+/* ---------- gateway diagnostics ---------- */
+async function runDiagnostics() {
+  const grid = $('diag-grid'), log = $('diag-log'), pill = $('diag-pill');
+  const lines = [];
+  const cards = [];
+  const card = (label, value, tone) => {
+    const tones = { ok: 'bg-ok text-ok-fg', bad: 'bg-warn text-warn-fg', flat: 'bg-muted text-text' };
+    cards.push('<div class="rounded-lg p-3 ' + (tones[tone] || tones.flat) + '">' +
+      '<div class="text-xs font-bold uppercase tracking-wider opacity-70">' + label + '</div>' +
+      '<div class="mono mt-1 break-all text-xs font-bold">' + value + '</div></div>');
+  };
+
+  pill.className = 'mr-2 inline-block rounded-full bg-muted px-2 py-0.5 text-xs font-black uppercase tracking-wider text-text';
+  pill.textContent = 'Checking...';
+  $('diag-target').textContent = gw();
+
+  if (!feat.reference) {
+    card('Reference', 'not set', 'bad');
+    grid.innerHTML = cards.join('');
+    log.textContent = 'Nothing to check yet. Paste a collection reference into CONFIG.records, then re-run.';
+    pill.className = 'mr-2 inline-block rounded-full bg-muted px-2 py-0.5 text-xs font-black uppercase tracking-wider text-text';
+    pill.textContent = 'Idle';
+    return;
+  }
+
+  const url = bzz(feat.reference, CONFIG.FILES.audio);
+  lines.push('GET  ' + url);
+
+  let ok = true;
+
+  // 1. reachable + content type
+  try {
+    const r = await fetch(url, { method: 'HEAD' });
+    lines.push('  -> ' + r.status + ' ' + r.statusText);
+    card('Reachable', r.ok ? r.status + ' OK' : r.status + ' FAIL', r.ok ? 'ok' : 'bad');
+    card('Content-Type', r.headers.get('content-type') || '(none)', r.headers.get('content-type') ? 'ok' : 'bad');
+
+    // Cross-origin fetches only expose the CORS-safelisted response headers.
+    // Accept-Ranges and Content-Range are NOT on that list, so they read as
+    // null here even when the server sends them. Do not report that as a
+    // failure -- the 206 status below is the authoritative test.
+    const sameOrigin = new URL(url, location.href).origin === location.origin;
+    const ar = r.headers.get('accept-ranges');
+    if (ar) {
+      card('Accept-Ranges', ar, ar === 'bytes' ? 'ok' : 'bad');
+    } else if (!sameOrigin) {
+      card('Accept-Ranges', 'hidden by CORS', 'flat');
+      lines.push('  accept-ranges: not readable cross-origin (expected).');
+      lines.push('  A production gateway should send:');
+      lines.push('    Access-Control-Expose-Headers: Accept-Ranges, Content-Range, Content-Length, ETag');
+    } else {
+      card('Accept-Ranges', '(not advertised)', 'bad');
+    }
+    lines.push('  content-type:  ' + r.headers.get('content-type'));
+    lines.push('  content-length:' + r.headers.get('content-length'));
+    if (!r.ok) ok = false;
+  } catch (e) {
+    ok = false;
+    card('Reachable', 'blocked', 'bad');
+    lines.push('  -> FAILED: ' + e.message);
+    lines.push('  This is almost always CORS or an unreachable gateway.');
+    lines.push('  Note: <audio> playback can still work even when fetch() is blocked.');
+  }
+
+  // 2. the one that decides whether seeking works
+  try {
+    // A 206 status is not enough. Some public gateways answer 206 and then
+    // send far more than was asked for -- bzz.link returns the whole file for
+    // a mid-file range, which makes seeking in long audio slow or wrong. So
+    // ask for a known 1 KB slice from the middle and check the size actually
+    // returned. Content-Length is CORS-safelisted, so this works cross-origin.
+    const WANT = 1024, FROM = 5000000;
+    const r = await fetch(url, { headers: { Range: 'bytes=' + FROM + '-' + (FROM + WANT - 1) } });
+    const cr = r.headers.get('content-range');
+    const got = Number(r.headers.get('content-length'));
+    lines.push('GET with Range: bytes=' + FROM + '-' + (FROM + WANT - 1) + '  (1 KB from mid-file)');
+    lines.push('  -> ' + r.status + ' ' + r.statusText +
+               (cr ? '  content-range: ' + cr : '  (content-range hidden by CORS)'));
+
+    if (r.status !== 206) {
+      ok = false;
+      card('Range request', r.status + ' (no 206)', 'bad');
+      lines.push('  No 206. The browser must fetch the whole file before it can seek.');
+    } else if (got && got > WANT * 8) {
+      ok = false;
+      card('Range request', 'over-sends ' + (got / 1048576).toFixed(1) + ' MB', 'bad');
+      lines.push('  206, but the gateway sent ' + got + ' bytes for a ' + WANT + ' byte request.');
+      lines.push('  Seeking will be slow or land in the wrong place on this gateway.');
+      lines.push('  Use a gateway that honours ranges, or our own Bee node.');
+    } else {
+      card('Range request', '206, ' + (got || WANT) + ' bytes', 'ok');
+      lines.push('  Exact slice returned. Seeking works on this gateway.');
+    }
+  } catch (e) {
+    ok = false;
+    card('Range request', 'blocked', 'bad');
+    lines.push('  Range check failed: ' + e.message);
+  }
+
+  lines.push('');
+  lines.push('secure context (crypto.subtle available): ' + (window.isSecureContext ? 'yes' : 'NO -- serve on http://localhost or https'));
+
+  grid.innerHTML = cards.join('');
+  log.textContent = lines.join('\n');
+  pill.className = 'mr-2 inline-block rounded-full px-2 py-0.5 text-xs font-black uppercase tracking-wider ' + (ok ? 'bg-ok text-ok-fg' : 'bg-warn text-warn-fg');
+  pill.textContent = ok ? 'Pass' : 'Check';
+}
+
+if (CONFIG.SHOW_DIAGNOSTICS) {
+  $('diag').classList.remove('hidden');
+  $('diag-run').addEventListener('click', runDiagnostics);
+  runDiagnostics();
+}
+</script>
