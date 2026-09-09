@@ -12,14 +12,16 @@
 <style>
   /* Tokens lifted from lotus/resources/css/app.css */
   :root{
-    --site-background:#fdfcfb; --background:#fdfaff; --foreground:#1a0f20;
+    --site-background:#ffffff; --background:#fdfaff; --foreground:#1a0f20;
     --text:#242124; --text-muted:#6b666b;
     --card:#ffffff;
     --primary:#a24a89; --primary-foreground:#ffffff;
     --secondary:#f3e7f1; --secondary-foreground:#6f356d;
     --muted:#f3eee3; --muted-foreground:#8a6898;
     --border:rgba(162,74,137,.14);
+    --rule:rgba(162,74,137,.22);
     --heading:#a24a89; --brand-deep:#6d3285; --brand-tint:#f4daff;
+    --band-alt:#faf3f8;
     --warning-subtle:#fde9b0; --warning-subtle-fg:#7a4e10;
     --chart-4:#7a9c72; --chart-5:#d5a642;
     --radius:.875rem; --radius-sm:.75rem;
@@ -38,7 +40,7 @@
 
   /* ============ sticky white header, as on stage ============ */
   .topbar{
-    position:sticky;top:0;z-index:40;background:#fff;
+    position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);
     border-bottom:1px solid rgba(162,74,137,.1);
     box-shadow:var(--shadow-bar);backdrop-filter:blur(8px);
   }
@@ -57,27 +59,54 @@
   }
   .topnav a:hover{background:var(--secondary);color:var(--secondary-foreground)}
   .topnav a.accent{color:var(--primary)}
+  .topnav a.current{background:var(--secondary);color:var(--secondary-foreground)}
 
-  /* ============ page ============ */
-  .page{max-width:1180px;margin:0 auto;padding:40px 24px 80px}
+  /* ============ bands: each section is its own full width block ============ */
+  .band{padding:76px 0;border-top:1px solid var(--rule);scroll-margin-top:81px}
+  .band--alt{background:var(--band-alt)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 
-  .pagehead{margin-bottom:38px}
+  /* ============ hero ============ */
+  .hero{
+    padding:56px 0 60px;
+    background:linear-gradient(180deg,var(--brand-tint) 0%,#fdf6fb 55%,var(--site-background) 100%);
+    border-bottom:1px solid var(--rule);
+  }
   h1{
-    font-size:clamp(32px,5vw,46px);font-weight:800;color:var(--heading);
-    letter-spacing:-.02em;line-height:1.1;margin-bottom:8px;
+    font-size:clamp(34px,5vw,50px);font-weight:800;color:var(--heading);
+    letter-spacing:-.025em;line-height:1.08;margin-bottom:10px;
   }
-  .pagehead .sub{font-size:15.5px;color:var(--text-muted);max-width:70ch}
+  .hero .sub{font-size:16.5px;color:var(--text-muted);max-width:70ch}
+  .hero .stamp{
+    display:inline-flex;align-items:center;gap:8px;margin-top:18px;
+    background:#fff;border:1px solid var(--border);border-radius:999px;
+    padding:7px 15px;font-size:13.5px;font-weight:600;color:var(--secondary-foreground);
+  }
+  .hero .stamp svg{width:15px;height:15px;stroke:var(--primary);fill:none;stroke-width:1.8}
 
-  section{margin-bottom:52px;scroll-margin-top:96px}
-  .sechead{margin-bottom:20px}
-  h2{
-    font-size:clamp(26px,3.6vw,34px);font-weight:800;color:var(--heading);
-    letter-spacing:-.02em;line-height:1.15;margin-bottom:6px;
-  }
-  .sechead .sub{font-size:15.5px;color:var(--text-muted);max-width:78ch}
-  .sechead .sub + .sub{margin-top:8px}
+  /* ============ section headers ============ */
+  .sechead{margin-bottom:30px;padding-bottom:22px;border-bottom:2px solid var(--rule)}
   .eyebrow{
-    font-size:13px;color:var(--text-muted);font-weight:600;margin-bottom:6px;
+    display:flex;align-items:center;gap:11px;margin-bottom:13px;
+    font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--primary);
+  }
+  .secnum{
+    display:inline-flex;align-items:center;justify-content:center;flex:none;
+    width:28px;height:28px;border-radius:9px;background:var(--primary);color:#fff;
+    font-size:13px;font-weight:800;letter-spacing:0;
+  }
+  h2{
+    font-size:clamp(27px,3.6vw,36px);font-weight:800;color:var(--heading);
+    letter-spacing:-.022em;line-height:1.12;margin-bottom:10px;
+  }
+  .sechead .sub{font-size:16px;color:var(--text-muted);max-width:78ch}
+  .sechead .sub + .sub{margin-top:9px}
+
+  /* a small label above a group of cards inside a section */
+  .subhead{
+    font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;
+    color:var(--muted-foreground);margin:34px 0 14px;
   }
 
   /* ============ cards ============ */
@@ -197,7 +226,7 @@
   .callout strong{font-weight:800}
 
   footer{
-    border-top:1px solid var(--border);background:#fff;
+    border-top:1px solid var(--rule);background:#fff;
   }
   .footin{
     max-width:1180px;margin:0 auto;padding:30px 24px 40px;text-align:center;
@@ -212,9 +241,10 @@
     .bar{height:auto;padding:14px 18px;justify-content:center}
     .topnav{justify-content:center;gap:2px}
     .topnav a{font-size:14px;padding:7px 10px}
-    .page{padding:28px 18px 60px}
+    .wrap{padding:0 18px}
+    .hero{padding:34px 0 40px}
+    .band{padding:48px 0;scroll-margin-top:130px}
     .g2,.g3{grid-template-columns:1fr}
-    section{margin-bottom:40px}
   }
 </style>
 </head>
@@ -227,7 +257,7 @@
       <span>lotus</span>
     </a>
     <nav class="topnav">
-      <a href="#do">What to do</a>
+      <a href="#do">What to build</a>
       <a href="#dates">Dates</a>
       <a href="#meetings">Sessions</a>
       <a href="#testing">Test environment</a>
@@ -237,292 +267,315 @@
   </div>
 </div>
 
-<main class="page" id="top">
+<main id="top">
 
-  <div class="pagehead">
-    <h1>Lotus Seeds</h1>
-    <p class="sub">Every meeting, every recording, the test environment, the next dates and what we need from you. One page, kept current between sessions. Updated 2 September 2026, after session 3.</p>
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <div class="wrap">
+      <h1>Lotus Seeds</h1>
+      <p class="sub">Every meeting, every recording, the test environment, the next dates and what we need from you. One page, kept current between sessions.</p>
+      <span class="stamp">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+        Updated 2 September 2026, after session 3
+      </span>
+    </div>
   </div>
 
-  <!-- ============ ACTION ITEMS ============ -->
-  <section id="do">
-    <div class="sechead">
-      <div class="eyebrow">Before 7 October</div>
-      <h2>Two things to build, and a handful of questions</h2>
-      <p class="sub">Building the real thing is the only test that tells us whether Lotus works, and these two are the most useful thing you can send us this month.</p>
-    </div>
+  <!-- ============ 01 · ACTION ITEMS ============ -->
+  <section class="band" id="do">
+    <div class="wrap">
+      <header class="sechead">
+        <div class="eyebrow"><span class="secnum">1</span>Before 7 October</div>
+        <h2>Two things to build</h2>
+        <p class="sub">Building the real thing is the test that tells us whether Lotus works. These two are the most useful thing you can send us this month.</p>
+      </header>
 
-    <div class="grid g2">
-      <div class="card">
-        <div class="body">
-          <div class="badges"><span class="badge solid">1</span><span class="badge soft">Events</span></div>
-          <h3>Create a real recurring event</h3>
-          <p>Not a test event. One you actually run, and <strong>make it a recurring one</strong> &mdash; a weekly class, a monthly retreat, whatever repeats at your centre. Real sessions, formats, teacher, capacity and prices. Then <strong>register for it yourself</strong>, as a participant would, all the way to the end.</p>
-          <p>Membership pricing is not in that path yet, so book as an ordinary participant this round.</p>
-          <p><strong>Then go back and change something on the recurring event</strong> &mdash; swap the teacher, or add an extra session &mdash; and read what the propagation summary tells you it is about to do across the occurrences. <strong>That is the piece we most need tested.</strong></p>
+      <div class="grid g2">
+        <div class="card">
+          <div class="body">
+            <div class="badges"><span class="badge solid">1</span><span class="badge soft">Events</span></div>
+            <h3>Create a real recurring event</h3>
+            <p>Pick one you actually run, and <strong>make it a recurring one</strong> &mdash; a weekly class, a monthly retreat, whatever repeats at your centre. Use your real sessions, formats, teacher, capacity and prices. Then <strong>register for it yourself</strong>, as a participant would, all the way to the end.</p>
+            <p>Book as an ordinary participant this round; membership pricing joins that path next.</p>
+            <p><strong>Then go back and change something on the recurring event</strong> &mdash; swap the teacher, or add an extra session &mdash; and read what the propagation summary tells you it is about to do across the occurrences. <strong>That is the piece we most need tested.</strong></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="body">
+            <div class="badges"><span class="badge solid">2</span><span class="badge soft">Memberships</span></div>
+            <h3>Create a real membership</h3>
+            <p>Build the membership program you would actually sell: your real tier names, your real prices, your real benefits, and which events each tier includes. Publish it.</p>
+            <p>Nothing you publish charges anyone yet, so you can shape it freely &mdash; and you will find out fast whether your tiers fit. <strong>Publishing locks a plan in</strong>, so choose as if it were live.</p>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <div class="body">
-          <div class="badges"><span class="badge solid">2</span><span class="badge soft">Memberships</span></div>
-          <h3>Create a real membership</h3>
-          <p>Not a placeholder tier. Build the membership program you would actually sell: your real tier names, your real prices, your real benefits, and which events each tier includes. Publish it.</p>
-          <p>Nobody can join yet, so nothing you publish charges anyone. But you will find out fast whether your tiers fit, and <strong>a published plan has no edit button</strong>, so choose as if it were live.</p>
-        </div>
-      </div>
-    </div>
 
-    <div class="grid g2" style="margin-top:20px">
-      <div class="card tint">
-        <div class="body">
-          <h3>Why the membership one matters most</h3>
-          <p>Payments arrive next, and once a member is charged their terms are frozen. Anything wrong in the shape of your program is cheap to fix this month and expensive to fix after.</p>
+      <div class="grid g2" style="margin-top:20px">
+        <div class="card tint">
+          <div class="body">
+            <h3>Why the membership one matters most</h3>
+            <p>Payments arrive next, and once a member is charged their terms are frozen. This month is the cheap moment to get the shape of your program exactly how you want it.</p>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="body">
-          <h3>And send us one thing that felt wrong</h3>
-          <p>One honest observation from each of you is enough to change the next cycle. The feedback form or the channel, whichever is quicker for you.</p>
+        <div class="card">
+          <div class="body">
+            <h3>Send us one thing you noticed</h3>
+            <p>One honest observation from each of you is enough to change the next cycle. The feedback form or the channel, whichever is quicker for you.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ DATES ============ -->
-  <section id="dates">
-    <div class="sechead">
-      <div class="eyebrow">How we meet from here</div>
-      <h2>Monthly, first Wednesday, 16:00 London</h2>
-      <p class="sub prose">The three-week rhythm matched a fourteen-week sprint. Now that we are into a longer window, a month gives you enough time to actually use Lotus between sessions rather than only hearing about it. Same link every time: <a href="http://greet.metaprovide.org/lotus-seeds" target="_blank" rel="noopener">greet.metaprovide.org/lotus-seeds</a></p>
-    </div>
+  <!-- ============ 02 · DATES ============ -->
+  <section class="band band--alt" id="dates">
+    <div class="wrap">
+      <header class="sechead">
+        <div class="eyebrow"><span class="secnum">2</span>How we meet from here</div>
+        <h2>Monthly, first Wednesday, 16:00 London</h2>
+        <p class="sub prose">A month gives you enough time to actually use Lotus between sessions rather than only hearing about it &mdash; the three-week rhythm belonged to the fourteen-week sprint, and we are into a longer window now. Same link every time: <a href="http://greet.metaprovide.org/lotus-seeds" target="_blank" rel="noopener">greet.metaprovide.org/lotus-seeds</a></p>
+      </header>
 
-    <div class="datecard featured">
-      <div class="badges"><span class="badge solid">Next</span><span class="badge soft">Session 4</span></div>
-      <div class="d">Wednesday 7 October 2026</div>
-      <div class="s">Payments and memberships end to end, if Gate C lands them</div>
-      <div class="tzrow">
-        <span class="tz"><b>16:00</b> London</span>
-        <span class="tz"><b>16:00</b> Lisbon</span>
-        <span class="tz"><b>17:00</b> Paris &middot; Madrid</span>
-        <span class="tz"><b>11:00</b> New York</span>
-        <span class="tz"><b>09:00</b> Santa Fe</span>
-      </div>
-    </div>
-
-    <div class="grid g2" style="margin-top:20px">
-      <div class="datecard">
-        <div class="d">Wednesday 4 November 2026</div>
-        <div class="s">Session 5</div>
+      <div class="datecard featured">
+        <div class="badges"><span class="badge solid">Next</span><span class="badge soft">Session 4</span></div>
+        <div class="d">Wednesday 7 October 2026</div>
+        <div class="s">Payments and memberships end to end, if Gate C lands them</div>
         <div class="tzrow">
-          <span class="tz"><b>16:00</b> London</span><span class="tz"><b>16:00</b> Lisbon</span>
-          <span class="tz"><b>17:00</b> Paris</span><span class="tz"><b>11:00</b> New York</span>
+          <span class="tz"><b>16:00</b> London</span>
+          <span class="tz"><b>16:00</b> Lisbon</span>
+          <span class="tz"><b>17:00</b> Paris &middot; Madrid</span>
+          <span class="tz"><b>11:00</b> New York</span>
           <span class="tz"><b>09:00</b> Santa Fe</span>
         </div>
       </div>
-      <div class="datecard">
-        <div class="d">Wednesday 2 December 2026</div>
-        <div class="s">Session 6</div>
-        <div class="tzrow">
-          <span class="tz"><b>16:00</b> London</span><span class="tz"><b>16:00</b> Lisbon</span>
-          <span class="tz"><b>17:00</b> Paris</span><span class="tz"><b>11:00</b> New York</span>
-          <span class="tz"><b>09:00</b> Santa Fe</span>
-        </div>
-      </div>
-      <div class="datecard">
-        <div class="d">Wednesday 6 January 2027</div>
-        <div class="s">Session 7</div>
-        <div class="tzrow">
-          <span class="tz"><b>16:00</b> London</span><span class="tz"><b>16:00</b> Lisbon</span>
-          <span class="tz"><b>17:00</b> Paris</span><span class="tz"><b>11:00</b> New York</span>
-          <span class="tz"><b>09:00</b> Santa Fe</span>
-        </div>
-      </div>
-      <div class="datecard">
-        <div class="d">Wednesday 3 February 2027</div>
-        <div class="s">Session 8</div>
-        <div class="tzrow">
-          <span class="tz"><b>16:00</b> London</span><span class="tz"><b>16:00</b> Lisbon</span>
-          <span class="tz"><b>17:00</b> Paris</span><span class="tz"><b>11:00</b> New York</span>
-          <span class="tz"><b>09:00</b> Santa Fe</span>
-        </div>
-      </div>
-    </div>
 
-    <div class="callout sand"><strong>On the clock changes.</strong> Europe leaves summer time on 25 October and the US on 1 November, so every session from November onwards keeps the same local time in every city on this list. Nothing shifts for you.</div>
-  </section>
+      <div class="subhead">The rest of the calendar</div>
 
-  <!-- ============ MEETINGS ============ -->
-  <section id="meetings">
-    <div class="sechead">
-      <div class="eyebrow">The archive</div>
-      <h2>Every session, the slides and the recording</h2>
-      <p class="sub">If you missed one or want to go back to something specific, both the slides and the video are here. The slides are the reference; the recordings have the conversation.</p>
-    </div>
-
-    <div class="grid g3">
-      <div class="card">
-        <div class="media"><img src="/lotus-mark.png" alt=""></div>
-        <div class="body">
-          <div class="badges"><span class="badge soft">Session 1</span><span class="badge">Kickoff</span></div>
-          <h3>Kickoff &amp; first look</h3>
-          <p>Four centres onboarded, a live demo of the participant and admin sides, and the feedback channels handed over.</p>
-          <div class="meta">
-            <div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg> 22 July 2026</div>
+      <div class="grid g2">
+        <div class="datecard">
+          <div class="d">Wednesday 4 November 2026</div>
+          <div class="s">Session 5</div>
+          <div class="tzrow">
+            <span class="tz"><b>16:00</b> London</span><span class="tz"><b>16:00</b> Lisbon</span>
+            <span class="tz"><b>17:00</b> Paris</span><span class="tz"><b>11:00</b> New York</span>
+            <span class="tz"><b>09:00</b> Santa Fe</span>
           </div>
-          <div class="actions">
-            <a class="btn solid" href="https://feedback.joyfuleffort.com/lotus-seeds-kickoff-2026-07-22.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg> Slides</a>
-            <a class="btn" href="https://galaxy.metaprovide.org/s/rXEtgbN4SyyqaKk" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M5 4l14 8-14 8z"/></svg> Recording</a>
+        </div>
+        <div class="datecard">
+          <div class="d">Wednesday 2 December 2026</div>
+          <div class="s">Session 6</div>
+          <div class="tzrow">
+            <span class="tz"><b>16:00</b> London</span><span class="tz"><b>16:00</b> Lisbon</span>
+            <span class="tz"><b>17:00</b> Paris</span><span class="tz"><b>11:00</b> New York</span>
+            <span class="tz"><b>09:00</b> Santa Fe</span>
+          </div>
+        </div>
+        <div class="datecard">
+          <div class="d">Wednesday 6 January 2027</div>
+          <div class="s">Session 7</div>
+          <div class="tzrow">
+            <span class="tz"><b>16:00</b> London</span><span class="tz"><b>16:00</b> Lisbon</span>
+            <span class="tz"><b>17:00</b> Paris</span><span class="tz"><b>11:00</b> New York</span>
+            <span class="tz"><b>09:00</b> Santa Fe</span>
+          </div>
+        </div>
+        <div class="datecard">
+          <div class="d">Wednesday 3 February 2027</div>
+          <div class="s">Session 8</div>
+          <div class="tzrow">
+            <span class="tz"><b>16:00</b> London</span><span class="tz"><b>16:00</b> Lisbon</span>
+            <span class="tz"><b>17:00</b> Paris</span><span class="tz"><b>11:00</b> New York</span>
+            <span class="tz"><b>09:00</b> Santa Fe</span>
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="media"><img src="/lotus-mark.png" alt=""></div>
-        <div class="body">
-          <div class="badges"><span class="badge soft">Session 2</span><span class="badge">Cycle review</span></div>
-          <h3>Cycle review</h3>
-          <p>Moodle courses end to end, the membership foundation, and the six things you named that shaped the next cycle.</p>
-          <div class="meta">
-            <div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg> 12 August 2026</div>
-          </div>
-          <div class="actions">
-            <a class="btn solid" href="https://feedback.joyfuleffort.com/lotus-seeds-session2-2026-08-12.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg> Slides</a>
-            <a class="btn" href="https://galaxy.metaprovide.org/s/i3aRwoorzM6HcBa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M5 4l14 8-14 8z"/></svg> Recording</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="media"><img src="/lotus-mark.png" alt=""></div>
-        <div class="body">
-          <div class="badges"><span class="badge soft">Session 3</span><span class="badge sand">Most recent</span></div>
-          <h3>Run-up to launch</h3>
-          <p>Memberships and the grandfathering model, event propagation, and what the next six months hold.</p>
-          <div class="meta">
-            <div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg> 2 September 2026</div>
-          </div>
-          <div class="actions">
-            <a class="btn solid" href="https://feedback.joyfuleffort.com/lotus-seeds-session3-2026-09-02.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg> Slides</a>
-            <a class="btn" href="https://galaxy.metaprovide.org/s/RY9W3Lcr3Ce7MWt" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M5 4l14 8-14 8z"/></svg> Recording</a>
-          </div>
-        </div>
-      </div>
+      <div class="callout sand"><strong>On the clock changes.</strong> Europe leaves summer time on 25 October and the US on 1 November, so every session from November onwards keeps the same local time in every city on this list. Put it in your calendar once and it stays right.</div>
     </div>
   </section>
 
-  <!-- ============ TEST ENVIRONMENT ============ -->
-  <section id="testing">
-    <div class="sechead">
-      <div class="eyebrow">Where to try things</div>
-      <h2>The test environment, and who to log in as</h2>
-      <p class="sub prose">Everything lives at <a href="https://stage.joyfuleffort.com" target="_blank" rel="noopener">stage.joyfuleffort.com</a>. It is a test system: nothing here charges anyone, nothing reaches a real participant, and you cannot break anything we cannot put back. Please do experiment.</p>
-      <p class="sub prose">The admin panel is at <a href="https://stage.joyfuleffort.com/admin" target="_blank" rel="noopener">stage.joyfuleffort.com/admin</a> and the participant side is the site itself. <strong>Each centre has its own admin account</strong>, which sees only that centre's events, sessions, registrations, memberships, pricing, venue and people.</p>
-    </div>
+  <!-- ============ 03 · MEETINGS ============ -->
+  <section class="band" id="meetings">
+    <div class="wrap">
+      <header class="sechead">
+        <div class="eyebrow"><span class="secnum">3</span>The archive</div>
+        <h2>Slides and recordings</h2>
+        <p class="sub">Go back to any session whenever you need it. The slides are the quick reference; the recordings have the conversation.</p>
+      </header>
 
-    <div class="tw">
-      <table>
-        <thead><tr><th>Centre</th><th>Admin account</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Jamyang Buddhist Centre London</strong></td><td><code>jamyang-admin@lotus.test</code></td></tr>
-          <tr><td><strong>Institut Vajra Yogini</strong> (IVY)</td><td><code>ivy-admin@lotus.test</code></td></tr>
-          <tr><td><strong>Thubten Norbu Ling</strong> (TNL)</td><td><code>tnl-admin@lotus.test</code></td></tr>
-          <tr><td><strong>Shantideva</strong></td><td><code>shantideva-admin@lotus.test</code></td></tr>
-          <tr><td><strong>Maitreya Institute</strong></td><td><code>maitreya-admin@lotus.test</code></td></tr>
-        </tbody>
-      </table>
-    </div>
+      <div class="grid g3">
+        <div class="card">
+          <div class="media"><img src="/lotus-mark.png" alt=""></div>
+          <div class="body">
+            <div class="badges"><span class="badge soft">Session 1</span><span class="badge">Kickoff</span></div>
+            <h3>Kickoff &amp; first look</h3>
+            <p>Four centres onboarded, a live demo of the participant and admin sides, and the feedback channels handed over.</p>
+            <div class="meta">
+              <div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg> 22 July 2026</div>
+            </div>
+            <div class="actions">
+              <a class="btn solid" href="https://feedback.joyfuleffort.com/lotus-seeds-kickoff-2026-07-22.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg> Slides</a>
+              <a class="btn" href="https://galaxy.metaprovide.org/s/rXEtgbN4SyyqaKk" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M5 4l14 8-14 8z"/></svg> Recording</a>
+            </div>
+          </div>
+        </div>
 
-    <div class="callout"><strong>Passwords are not on this page, on purpose.</strong> Ask João or Lauren in the <a href="https://galaxy.metaprovide.org/call/xzfrt5aj" target="_blank" rel="noopener">Seeds channel</a> and you will have them in minutes. If you already had a password for your centre's admin account, it still works.</div>
+        <div class="card">
+          <div class="media"><img src="/lotus-mark.png" alt=""></div>
+          <div class="body">
+            <div class="badges"><span class="badge soft">Session 2</span><span class="badge">Cycle review</span></div>
+            <h3>Cycle review</h3>
+            <p>Moodle courses end to end, the membership foundation, and the six things you named that shaped the next cycle.</p>
+            <div class="meta">
+              <div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg> 12 August 2026</div>
+            </div>
+            <div class="actions">
+              <a class="btn solid" href="https://feedback.joyfuleffort.com/lotus-seeds-session2-2026-08-12.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg> Slides</a>
+              <a class="btn" href="https://galaxy.metaprovide.org/s/i3aRwoorzM6HcBa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M5 4l14 8-14 8z"/></svg> Recording</a>
+            </div>
+          </div>
+        </div>
 
-    <div class="grid" style="margin-top:20px">
-      <div class="card">
-        <div class="body">
-          <h3>Make your own users too</h3>
-          <p>You do not have to test with the admin account. Register a fresh participant with any email you control, and create additional staff users for your own centre from the admin panel. Testing with an account you made yourself is often the fastest way to spot something that is confusing rather than broken.</p>
-          <p><strong>New to the programme and without a login?</strong> Tell Lauren or João and we will set your centre up.</p>
+        <div class="card">
+          <div class="media"><img src="/lotus-mark.png" alt=""></div>
+          <div class="body">
+            <div class="badges"><span class="badge soft">Session 3</span><span class="badge sand">Most recent</span></div>
+            <h3>Run-up to launch</h3>
+            <p>Memberships and the grandfathering model, event propagation, and what the next six months hold.</p>
+            <div class="meta">
+              <div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg> 2 September 2026</div>
+            </div>
+            <div class="actions">
+              <a class="btn solid" href="https://feedback.joyfuleffort.com/lotus-seeds-session3-2026-09-02.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg> Slides</a>
+              <a class="btn" href="https://galaxy.metaprovide.org/s/RY9W3Lcr3Ce7MWt" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M5 4l14 8-14 8z"/></svg> Recording</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ QUESTIONS ============ -->
-  <section id="questions">
-    <div class="sechead">
-      <div class="eyebrow">What we need from you</div>
-      <h2>Four questions we cannot answer for you</h2>
-      <p class="sub">These are the ones where the right answer differs for each centre, and where changing your mind later is genuinely expensive. Answer in the channel, in the feedback form, or by email. A rough answer today beats a considered one in December.</p>
-    </div>
+  <!-- ============ 04 · TEST ENVIRONMENT ============ -->
+  <section class="band band--alt" id="testing">
+    <div class="wrap">
+      <header class="sechead">
+        <div class="eyebrow"><span class="secnum">4</span>Where to try things</div>
+        <h2>The test environment</h2>
+        <p class="sub prose">Everything lives at <a href="https://stage.joyfuleffort.com" target="_blank" rel="noopener">stage.joyfuleffort.com</a>. It is a safe place to experiment: nothing charges anyone, nothing reaches a real participant, and anything you change we can put back. Please do experiment.</p>
+        <p class="sub prose">The admin panel is at <a href="https://stage.joyfuleffort.com/admin" target="_blank" rel="noopener">stage.joyfuleffort.com/admin</a> and the participant side is the site itself. <strong>Each centre has its own admin account</strong>, which sees only that centre's events, sessions, registrations, memberships, pricing, venue and people.</p>
+      </header>
 
-    <div class="grid" style="gap:14px">
-      <div class="qcard">
-        <div class="n">1</div>
-        <h3>Your tables: what is missing?</h3>
-        <p>Look at the tables in the admin backend &mdash; events, registrations, people, memberships. <strong>Which fields or filters are missing so you can export the information you actually need?</strong></p>
-        <p>Be specific: the column your treasurer asks for, the filter you would use every Monday morning, the thing you currently rebuild by hand in a spreadsheet.</p>
+      <div class="subhead">Admin accounts</div>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Centre</th><th>Admin account</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Jamyang Buddhist Centre London</strong></td><td><code>jamyang-admin@lotus.test</code></td></tr>
+            <tr><td><strong>Institut Vajra Yogini</strong> (IVY)</td><td><code>ivy-admin@lotus.test</code></td></tr>
+            <tr><td><strong>Thubten Norbu Ling</strong> (TNL)</td><td><code>tnl-admin@lotus.test</code></td></tr>
+            <tr><td><strong>Shantideva</strong></td><td><code>shantideva-admin@lotus.test</code></td></tr>
+            <tr><td><strong>Maitreya Institute</strong></td><td><code>maitreya-admin@lotus.test</code></td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="qcard">
-        <div class="n">2</div>
-        <h3>Changing membership terms</h3>
-        <p>When you raise a price or change what is included, <strong>what should happen to people who already joined?</strong> Stay where they are indefinitely, move at their next renewal, or be asked?</p>
-        <p>And what notice do you feel you owe them?</p>
-      </div>
-      <div class="qcard">
-        <div class="n">3</div>
-        <h3>Included, or discounted?</h3>
-        <p>Jamyang's model is inclusive: a member simply pays nothing for an included event. IVY's card model is a percentage off. <strong>Today Lotus does the first and not the second.</strong></p>
-        <p>If we build percentages, <strong>they would apply to events only for now</strong> &mdash; not to courses, lodging or anything else. If your centre needs them, saying so now is far cheaper than later.</p>
-      </div>
-      <div class="qcard">
-        <div class="n">4</div>
-        <h3>Your back office</h3>
-        <p>We plan to build activate, pause, resume and cancel. We are not planning to build renew, refund, or change someone's billing.</p>
-        <p><strong>Our instinct is that staff should not change what a member is billed on their behalf.</strong> Renewing, upgrading or editing payment details are the member's own to do, from their account. Two look like real exceptions: <strong>cancel</strong>, because someone will always phone instead, and <strong>refund</strong>, which we probably do need to build.</p>
-        <p>Does that match a real week at your centre, or is there a case where you genuinely have to act in a member's name?</p>
+
+      <div class="callout"><strong>Ask us for your password.</strong> We keep passwords off this page on purpose. Ask João or Lauren in the <a href="https://galaxy.metaprovide.org/call/xzfrt5aj" target="_blank" rel="noopener">Seeds channel</a> and you will have yours in minutes. If you already had a password for your centre's admin account, it still works.</div>
+
+      <div class="grid" style="margin-top:20px">
+        <div class="card">
+          <div class="body">
+            <h3>Make your own users too</h3>
+            <p>Test with whichever account suits you. Register a fresh participant with any email you control, and create additional staff users for your own centre from the admin panel. Testing with an account you made yourself is often the fastest way to spot something that could be clearer.</p>
+            <p><strong>New to the programme and need a login?</strong> Tell Lauren or João and we will set your centre up.</p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="callout"><strong>And one for Jamyang:</strong> your Calm Abiding and Special Insight students are already enrolled and paying. When memberships arrive, what should they be offered?</div>
   </section>
 
-  <!-- ============ CONTACT ============ -->
-  <section id="contact">
-    <div class="sechead">
-      <div class="eyebrow">Always open</div>
-      <h2>Four ways to reach us</h2>
-      <p class="sub">You never need to wait for the next call. Most of what changes the build arrives between the meetings, not during them &mdash; four of the six items we shipped in August came in that way.</p>
-    </div>
+  <!-- ============ 05 · QUESTIONS ============ -->
+  <section class="band" id="questions">
+    <div class="wrap">
+      <header class="sechead">
+        <div class="eyebrow"><span class="secnum">5</span>What we need from you</div>
+        <h2>Four questions</h2>
+        <p class="sub">The right answer differs for each centre, so yours is the one that counts &mdash; and these are the choices that are cheapest to make now. Answer in the channel, in the feedback form, or by email. A rough answer today beats a considered one in December.</p>
+      </header>
 
-    <div class="grid g2">
-      <div class="card">
-        <div class="body">
-          <div class="badges"><span class="badge soft">Anything specific</span></div>
-          <h3>The feedback form</h3>
-          <p>A feature idea, a rough edge, a bug. Seconds to submit, and you can annotate a screenshot so we see exactly what you saw. Every item gets a response.</p>
-          <div class="actions"><a class="btn solid" href="https://feedback.joyfuleffort.com/" target="_blank" rel="noopener">feedback.joyfuleffort.com</a></div>
+      <div class="grid" style="gap:14px">
+        <div class="qcard">
+          <div class="n">1</div>
+          <h3>Your tables</h3>
+          <p>Look at the tables in the admin backend &mdash; events, registrations, people, memberships. <strong>Which fields or filters would let you export exactly the information you need?</strong></p>
+          <p>Be specific: the column your treasurer asks for, the filter you would use every Monday morning, the thing you currently rebuild by hand in a spreadsheet.</p>
+        </div>
+        <div class="qcard">
+          <div class="n">2</div>
+          <h3>Changing membership terms</h3>
+          <p>When you raise a price or change what is included, <strong>what should happen to people who already joined?</strong> Stay where they are indefinitely, move at their next renewal, or be asked?</p>
+          <p>And what notice do you feel you owe them?</p>
+        </div>
+        <div class="qcard">
+          <div class="n">3</div>
+          <h3>Included, or discounted?</h3>
+          <p>Jamyang's model is inclusive: a member simply pays nothing for an included event. IVY's card model is a percentage off. <strong>Lotus does the inclusive model today, and percentages are ours to build if you need them.</strong></p>
+          <p>If we build percentages, <strong>they would apply to events first</strong> &mdash; courses, lodging and the rest would follow later. If your centre needs them, saying so now is far cheaper than later.</p>
+        </div>
+        <div class="qcard">
+          <div class="n">4</div>
+          <h3>Your back office</h3>
+          <p>For staff we plan to build activate, pause, resume and cancel. Renewing, upgrading and editing payment details stay with the member, in their own account.</p>
+          <p><strong>Our instinct is that a member is the one who changes what they are billed.</strong> Two look like real exceptions: <strong>cancel</strong>, because someone will always phone instead, and <strong>refund</strong>, which we probably do need to build.</p>
+          <p>Does that match a real week at your centre, or is there a case where you genuinely have to act in a member's name?</p>
         </div>
       </div>
-      <div class="card">
-        <div class="body">
-          <div class="badges"><span class="badge soft">Everything else</span></div>
-          <h3>The Galaxy channel</h3>
-          <p>Questions, half formed thoughts, things you are not sure count. João and Lauren are both there, and so are the other centres.</p>
-          <div class="actions"><a class="btn solid" href="https://galaxy.metaprovide.org/call/xzfrt5aj" target="_blank" rel="noopener">Open the channel</a></div>
+
+      <div class="callout"><strong>And one for Jamyang:</strong> your Calm Abiding and Special Insight students are already enrolled and paying. When memberships arrive, what should they be offered?</div>
+    </div>
+  </section>
+
+  <!-- ============ 06 · CONTACT ============ -->
+  <section class="band band--alt" id="contact">
+    <div class="wrap">
+      <header class="sechead">
+        <div class="eyebrow"><span class="secnum">6</span>Always open</div>
+        <h2>Four ways to reach us</h2>
+        <p class="sub">You never need to wait for the next call. Most of what changes the build arrives between the meetings &mdash; four of the six items we shipped in August came in that way.</p>
+      </header>
+
+      <div class="grid g2">
+        <div class="card">
+          <div class="body">
+            <div class="badges"><span class="badge soft">Anything specific</span></div>
+            <h3>The feedback form</h3>
+            <p>A feature idea, a rough edge, a bug. Seconds to submit, and you can annotate a screenshot so we see exactly what you saw. Every item gets a response.</p>
+            <div class="actions"><a class="btn solid" href="https://feedback.joyfuleffort.com/" target="_blank" rel="noopener">feedback.joyfuleffort.com</a></div>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="body">
-          <div class="badges"><span class="badge">Programme &amp; centres</span></div>
-          <h3>Lauren Ross</h3>
-          <p>Anything about how Lotus should work for your centre, or about the Seeds programme itself.</p>
-          <div class="actions"><a class="btn" href="mailto:lauren@joyfuleffort.com">lauren@joyfuleffort.com</a></div>
+        <div class="card">
+          <div class="body">
+            <div class="badges"><span class="badge soft">Everything else</span></div>
+            <h3>The Galaxy channel</h3>
+            <p>Questions, half formed thoughts, things you are not sure count. João and Lauren are both there, and so are the other centres.</p>
+            <div class="actions"><a class="btn solid" href="https://galaxy.metaprovide.org/call/xzfrt5aj" target="_blank" rel="noopener">Open the channel</a></div>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="body">
-          <div class="badges"><span class="badge">Product &amp; build</span></div>
-          <h3>João Raposo</h3>
-          <p>Anything about what it does, when it lands, or why it works the way it does.</p>
-          <div class="actions"><a class="btn" href="mailto:joao.raposo@metaprovide.org">joao.raposo@metaprovide.org</a></div>
+        <div class="card">
+          <div class="body">
+            <div class="badges"><span class="badge">Programme &amp; centres</span></div>
+            <h3>Lauren Ross</h3>
+            <p>Anything about how Lotus should work for your centre, or about the Seeds programme itself.</p>
+            <div class="actions"><a class="btn" href="mailto:lauren@joyfuleffort.com">lauren@joyfuleffort.com</a></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="body">
+            <div class="badges"><span class="badge">Product &amp; build</span></div>
+            <h3>João Raposo</h3>
+            <p>Anything about what it does, when it lands, or why it works the way it does.</p>
+            <div class="actions"><a class="btn" href="mailto:joao.raposo@metaprovide.org">joao.raposo@metaprovide.org</a></div>
+          </div>
         </div>
       </div>
     </div>
@@ -540,6 +593,28 @@
     <a href="https://galaxy.metaprovide.org/call/xzfrt5aj" target="_blank" rel="noopener">Galaxy channel</a>
   </div>
 </footer>
+
+<script>
+  /* highlight the section you are reading in the top nav */
+  (function(){
+    var links = {};
+    document.querySelectorAll('.topnav a[href^="#"]').forEach(function(a){
+      links[a.getAttribute('href').slice(1)] = a;
+    });
+    var sections = document.querySelectorAll('section.band[id]');
+    if(!sections.length || !('IntersectionObserver' in window)) return;
+    var visible = {};
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bestRatio = 0;
+      Object.keys(visible).forEach(function(id){
+        if(visible[id] > bestRatio){ bestRatio = visible[id]; best = id; }
+      });
+      Object.keys(links).forEach(function(id){ links[id].classList.toggle('current', id === best); });
+    }, {rootMargin:'-81px 0px -55% 0px', threshold:[0,.15,.4,.75,1]});
+    sections.forEach(function(s){ io.observe(s); });
+  })();
+</script>
 
 </body>
 </html>
