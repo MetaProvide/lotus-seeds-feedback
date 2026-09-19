@@ -75,10 +75,78 @@ const CONFIG = {
   // be read from the browser there.
   OWN_GATEWAY_HOSTS: ['localhost', '127.0.0.1', 'hejbit', 'joyfuleffort'],
 
-  // Which record appears in the big "Recently preserved" panel.
-  FEATURED: 'kopan-33',
+  // Which record the detail panel shows on load. After that the panel follows
+  // whichever preserved teaching you click in the grid, so this is only the
+  // starting point, not a fixed feature slot.
+  FEATURED: 'tara-2006-1584',
 
   records: [
+    {
+      // ---------------------------------------------------------------------
+      // Tara Institute, Melbourne, 2 and 3 June 2006. Published by FPMT; the
+      // transcript is LYWA's, typed from the original tapes, so it does not
+      // line up with FPMT's video cuts. Packaged from the FPMT MP3 release with
+      // concat_audio.py + concat_transcripts.py, then package_fpmt.py, which
+      // reads 1584/teaching.json.
+      //
+      //   fpmt page  https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/
+      //   lywa       https://lamayeshe.com/article/why-we-need-spiritual-path-audio-and-unedited-transcript
+      //   mp3s       https://fpmt.box.com/v/TaraInstitute2006
+      //
+      // Uploaded to the real Swarm network and verified on
+      // api.gateway.ethswarm.org: metadata.json, audio.opus, transcript.txt and
+      // index.html all resolve, Range requests answer 206, and the audio and
+      // transcript hashes match the local originals byte for byte.
+      // ---------------------------------------------------------------------
+      id: 'tara-2006-1584',
+      title: 'Why we need a spiritual path',
+      teacher: 'Lama Zopa Rinpoche',
+      date: '2 June 2006',
+      place: 'Tara Institute, Melbourne, Australia',
+      meta: 'Archive #1584 &middot; 3 h 27 m &middot; 3 parts',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: true,
+      sourceUrl: 'https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/',
+      reference: '30b2a2de37790bbad8f8d8d5acd947d43a7848bdacd27e7bc61f68f332166697',
+      // Same postage batch as kopan-33: one batch covers the collections.
+      stamp: '1eca54ec4039d5a6956f6745184d89434f189af977688a1f34c99dadd8d7c870',
+      stampNote: 'Immutable batch, paid for by MetaProvide. Real BZZ is committed; the batch drains and must be topped up.',
+      durationSeconds: 12428,
+      transcriptSha256: 'c47635198fe762eee437b378ff6e520817624717d8cc59c6fba13a605eb62540'
+    },
+    {
+      // ---------------------------------------------------------------------
+      // Tara Institute, Melbourne, 2 and 3 June 2006. Published by FPMT; the
+      // transcript is LYWA's, typed from the original tapes, so it does not
+      // line up with FPMT's video cuts. Packaged from the FPMT MP3 release with
+      // concat_audio.py + concat_transcripts.py, then package_fpmt.py, which
+      // reads 1585/teaching.json.
+      //
+      //   fpmt page  https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/
+      //   lywa       https://lamayeshe.com/article/need-wisdom-and-compassion-audio-and-unedited-transcripts
+      //   mp3s       https://fpmt.box.com/v/TaraInstitute2006
+      //
+      // Uploaded to the real Swarm network and verified on
+      // api.gateway.ethswarm.org: metadata.json, audio.opus, transcript.txt and
+      // index.html all resolve, Range requests answer 206, and the audio and
+      // transcript hashes match the local originals byte for byte.
+      // ---------------------------------------------------------------------
+      id: 'tara-2006-1585',
+      title: 'The need for Wisdom and Compassion',
+      teacher: 'Lama Zopa Rinpoche',
+      date: '3 June 2006',
+      place: 'Tara Institute, Melbourne, Australia',
+      meta: 'Archive #1585 &middot; 4 h 31 m &middot; 3 parts',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: true,
+      sourceUrl: 'https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/',
+      reference: '697080c3b6d473f23a62dd40231943ba203acae22297e00004ce8389244594ef',
+      // Same postage batch as kopan-33: one batch covers the collections.
+      stamp: '1eca54ec4039d5a6956f6745184d89434f189af977688a1f34c99dadd8d7c870',
+      stampNote: 'Immutable batch, paid for by MetaProvide. Real BZZ is committed; the batch drains and must be topped up.',
+      durationSeconds: 16270,
+      transcriptSha256: '02c207a5adfa2cc853dcc0a081e95de6d12b541d0b4c778a8879f9d00a6b3095'
+    },
     {
       // ---------------------------------------------------------------------
       // THE TEST RECORD. Kopan 33 is fully public on lamayeshe.com: unedited
@@ -112,72 +180,6 @@ const CONFIG = {
       // Optional: sha256 of transcript.txt, captured before upload.
       // If set, "Verify" compares the downloaded file against it.
       transcriptSha256: '9da10130527a30e14be542925b40600eebff748169f5575f1397a45919c9253f'
-    },
-    {
-      // ---------------------------------------------------------------------
-      // Tara Institute, Melbourne, 2 and 3 June 2006. Published by FPMT; the
-      // transcript is LYWA's, typed from the original tapes, so it does not
-      // line up with FPMT's video cuts. Packaged from the FPMT MP3 release with
-      // concat_audio.py + concat_transcripts.py, then package_fpmt.py, which
-      // reads 1584/teaching.json.
-      //
-      //   fpmt page  https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/
-      //   lywa       https://lamayeshe.com/article/why-we-need-spiritual-path-audio-and-unedited-transcript
-      //   mp3s       https://fpmt.box.com/v/TaraInstitute2006
-      //
-      // Uploaded to the real Swarm network and verified on
-      // api.gateway.ethswarm.org: metadata.json, audio.opus, transcript.txt and
-      // index.html all resolve, Range requests answer 206, and the audio and
-      // transcript hashes match the local originals byte for byte.
-      // ---------------------------------------------------------------------
-      id: 'tara-2006-1584',
-      title: 'Why we need a spiritual path',
-      teacher: 'Lama Zopa Rinpoche',
-      date: '2 June 2006',
-      place: 'Tara Institute, Melbourne, Australia',
-      meta: 'Archive #1584 &middot; 3 h 27 m &middot; 3 parts',
-      formats: ['Audio', 'Transcript'],
-      rightsCleared: true,
-      sourceUrl: 'https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/',
-      reference: '30b2a2de37790bbad8f8d8d5acd947d43a7848bdacd27e7bc61f68f332166697',
-      // Same postage batch as kopan-33: one batch covers the collections.
-      stamp: '954319f6374dd78af5c815ff874fcfd9579a85e58453098f7ee09828483da942',
-      stampNote: 'Immutable batch, paid for by MetaProvide. Real BZZ is committed; the batch drains and must be topped up.',
-      durationSeconds: 12428,
-      transcriptSha256: 'c47635198fe762eee437b378ff6e520817624717d8cc59c6fba13a605eb62540'
-    },
-    {
-      // ---------------------------------------------------------------------
-      // Tara Institute, Melbourne, 2 and 3 June 2006. Published by FPMT; the
-      // transcript is LYWA's, typed from the original tapes, so it does not
-      // line up with FPMT's video cuts. Packaged from the FPMT MP3 release with
-      // concat_audio.py + concat_transcripts.py, then package_fpmt.py, which
-      // reads 1585/teaching.json.
-      //
-      //   fpmt page  https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/
-      //   lywa       https://lamayeshe.com/article/need-wisdom-and-compassion-audio-and-unedited-transcripts
-      //   mp3s       https://fpmt.box.com/v/TaraInstitute2006
-      //
-      // Uploaded to the real Swarm network and verified on
-      // api.gateway.ethswarm.org: metadata.json, audio.opus, transcript.txt and
-      // index.html all resolve, Range requests answer 206, and the audio and
-      // transcript hashes match the local originals byte for byte.
-      // ---------------------------------------------------------------------
-      id: 'tara-2006-1585',
-      title: 'The need for Wisdom and Compassion',
-      teacher: 'Lama Zopa Rinpoche',
-      date: '3 June 2006',
-      place: 'Tara Institute, Melbourne, Australia',
-      meta: 'Archive #1585 &middot; 4 h 31 m &middot; 3 parts',
-      formats: ['Audio', 'Transcript'],
-      rightsCleared: true,
-      sourceUrl: 'https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/',
-      reference: '697080c3b6d473f23a62dd40231943ba203acae22297e00004ce8389244594ef',
-      // Same postage batch as kopan-33: one batch covers the collections.
-      stamp: '954319f6374dd78af5c815ff874fcfd9579a85e58453098f7ee09828483da942',
-      stampNote: 'Immutable batch, paid for by MetaProvide. Real BZZ is committed; the batch drains and must be topped up.',
-      durationSeconds: 16270,
-      transcriptSha256: '02c207a5adfa2cc853dcc0a081e95de6d12b541d0b4c778a8879f9d00a6b3095'
     },
     {
       // Login-gated on lamayeshe.com, so it genuinely sits in the
@@ -437,9 +439,10 @@ const CONFIG = {
       </div>
 
       <!-- ============ featured record: the detail view ============ -->
-      <h2 class="mt-12 font-black text-2xl text-heading">Recently preserved</h2>
+      <h2 class="mt-12 font-black text-2xl text-heading">Selected teaching</h2>
+      <p class="mt-1 text-sm text-text-muted">Pick any preserved teaching below to open it here.</p>
 
-      <section class="mt-4 overflow-hidden rounded-2xl border border-border bg-card shadow-md">
+      <section id="feat-panel" class="mt-4 overflow-hidden rounded-2xl border border-border bg-card shadow-md">
         <div class="grid lg:grid-cols-[1.35fr_1fr]">
 
           <div class="p-5 sm:p-7">
@@ -724,10 +727,13 @@ const CHIPS = {
   $('stat-where').innerHTML = where;
 })();
 
-/* ---------- featured record ---------- */
-const feat = CONFIG.records.find(r => r.id === CONFIG.FEATURED) || CONFIG.records[0];
+/* ---------- the selected record ----------
+   `feat` is reassigned by selectRecord() below. Every handler on this page
+   reads `feat.<field>` when it runs rather than capturing it, so they all
+   follow the selection without being rebound.                              */
+let feat = CONFIG.records.find(r => r.id === CONFIG.FEATURED) || CONFIG.records[0];
 
-(function renderFeatured() {
+function renderFeatured() {
   const state = stateOf(feat);
   const [chipClass, chipLabel] = CHIPS[state];
 
@@ -805,7 +811,53 @@ const feat = CONFIG.records.find(r => r.id === CONFIG.FEATURED) || CONFIG.record
       if (bytes) $('feat-size').textContent = (bytes / 1048576).toFixed(1) + ' MB';
     })
     .catch(() => { $('feat-size').textContent = 'unknown'; });
-})();
+}
+
+/* ---------- switching the selection ----------
+   Everything the previous teaching left behind has to be cleared, or the panel
+   quietly mixes two records: a half-played audio position, an expanded
+   transcript, a stale verify result. Each is reset here before re-rendering. */
+function selectRecord(id, scroll) {
+  const next = CONFIG.records.find(r => r.id === id);
+  if (!next || next === feat || !next.reference) return;
+  feat = next;
+
+  const audio = $('audio');
+  audio.pause();
+  audio.removeAttribute('src');
+  $('feat-time').textContent = '00:00 / --:--';
+  $('feat-audio-note').textContent = '32 kbps Opus';
+  $('feat-size').textContent = '--';
+  document.querySelectorAll('#wave span').forEach(b => b.classList.remove('on'));
+
+  // Re-clamp the transcript and hide its toggle until the new one has loaded.
+  const box = $('transcript-box');
+  box.classList.add('max-h-40', 'overflow-hidden');
+  $('transcript-fade').classList.remove('hidden');
+  $('btn-more-label').textContent = 'Read full transcript';
+  $('icon-more').style.transform = '';
+  $('btn-more').setAttribute('aria-expanded', 'false');
+  $('btn-more').classList.add('hidden');
+  $('btn-more').classList.remove('inline-flex');
+
+  $('verify-out').classList.add('hidden');
+
+  renderFeatured();
+  paintSelection();
+  if (scroll) $('feat-panel').scrollIntoView({ block: 'start', behavior: 'smooth' });
+}
+
+/* Which card is currently open in the panel. */
+function paintSelection() {
+  document.querySelectorAll('#grid [data-card]').forEach(el => {
+    const on = el.dataset.card === feat.id;
+    el.classList.toggle('border-primary', on);
+    el.classList.toggle('ring-2', on);
+    el.classList.toggle('ring-primary/30', on);
+  });
+}
+
+renderFeatured();
 
 /* ---------- postage batch: how much life is left on the stamp ----------
    Reads batchTTL (seconds remaining) from GET /stamps/{batchID} and turns it
@@ -1004,10 +1056,15 @@ $('grid').innerHTML = CONFIG.records.map(r => {
   const ref = r.reference
     ? '<div class="mono mt-4 truncate border-t border-border/60 pt-3 text-xs text-text-muted">bzz / ' + r.reference.slice(0, 8) + '...' + r.reference.slice(-6) + '</div>'
     : '<div class="mt-4 border-t border-border/60 pt-3 text-xs text-text-muted">No reference yet</div>';
-  const href = r.reference ? bzz(r.reference, '') : '#';
-  return '<li class="h-full min-w-0">' +
-    '<a href="' + href + '" class="group block h-full rounded-2xl">' +
-    '<div class="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card py-0 shadow-md transition-[border-color,box-shadow] group-hover:border-primary/30 group-hover:shadow-lg">' +
+  // Only a teaching that is actually on Swarm can be opened in the panel, so
+  // only those are interactive. The rest are not links either -- there is
+  // nothing to open yet, and a link that goes nowhere is worse than plain text.
+  const open  = r.reference
+    ? '<button type="button" data-select="' + r.id + '" class="group block h-full w-full cursor-pointer rounded-2xl text-left">'
+    : '<div class="group block h-full rounded-2xl">';
+  const close = r.reference ? '</button>' : '</div>';
+  return '<li class="h-full min-w-0">' + open +
+    '<div data-card="' + r.id + '" class="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card py-0 shadow-md transition-[border-color,box-shadow,ring] group-hover:border-primary/30 group-hover:shadow-lg">' +
       '<div class="flex flex-col gap-3 p-4">' +
         '<div class="flex flex-wrap items-center gap-1.5">' +
           '<span class="rounded-full px-2.5 py-1 text-xs font-bold ' + chipClass + '">' + chipLabel + '</span>' +
@@ -1022,8 +1079,15 @@ $('grid').innerHTML = CONFIG.records.map(r => {
           '<li class="flex min-w-0 items-start gap-3">' + pinIcon + '<span class="break-words text-text-muted">' + r.place + '</span></li>' +
           '<li class="flex min-w-0 items-start gap-3">' + clkIcon + '<span class="text-text-muted">' + r.meta + '</span></li>' +
         '</ul>' + ref +
-      '</div></div></a></li>';
+      '</div></div>' + close + '</li>';
 }).join('');
+
+// Delegated so it survives any future re-render of the grid.
+$('grid').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-select]');
+  if (btn) selectRecord(btn.dataset.select, true);
+});
+paintSelection();
 
 /* ---------- gateway diagnostics ---------- */
 async function runDiagnostics() {
