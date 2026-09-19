@@ -114,6 +114,72 @@ const CONFIG = {
       transcriptSha256: '9da10130527a30e14be542925b40600eebff748169f5575f1397a45919c9253f'
     },
     {
+      // ---------------------------------------------------------------------
+      // Tara Institute, Melbourne, 2 and 3 June 2006. Published by FPMT; the
+      // transcript is LYWA's, typed from the original tapes, so it does not
+      // line up with FPMT's video cuts. Packaged from the FPMT MP3 release with
+      // concat_audio.py + concat_transcripts.py, then package_fpmt.py, which
+      // reads 1584/teaching.json.
+      //
+      //   fpmt page  https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/
+      //   lywa       https://lamayeshe.com/article/why-we-need-spiritual-path-audio-and-unedited-transcript
+      //   mp3s       https://fpmt.box.com/v/TaraInstitute2006
+      //
+      // Uploaded to the real Swarm network and verified on
+      // api.gateway.ethswarm.org: metadata.json, audio.opus, transcript.txt and
+      // index.html all resolve, Range requests answer 206, and the audio and
+      // transcript hashes match the local originals byte for byte.
+      // ---------------------------------------------------------------------
+      id: 'tara-2006-1584',
+      title: 'Why we need a spiritual path',
+      teacher: 'Lama Zopa Rinpoche',
+      date: '2 June 2006',
+      place: 'Tara Institute, Melbourne, Australia',
+      meta: 'Archive #1584 &middot; 3 h 27 m &middot; 3 parts',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: true,
+      sourceUrl: 'https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/',
+      reference: '30b2a2de37790bbad8f8d8d5acd947d43a7848bdacd27e7bc61f68f332166697',
+      // Same postage batch as kopan-33: one batch covers the collections.
+      stamp: '954319f6374dd78af5c815ff874fcfd9579a85e58453098f7ee09828483da942',
+      stampNote: 'Immutable batch, paid for by MetaProvide. Real BZZ is committed; the batch drains and must be topped up.',
+      durationSeconds: 12428,
+      transcriptSha256: 'c47635198fe762eee437b378ff6e520817624717d8cc59c6fba13a605eb62540'
+    },
+    {
+      // ---------------------------------------------------------------------
+      // Tara Institute, Melbourne, 2 and 3 June 2006. Published by FPMT; the
+      // transcript is LYWA's, typed from the original tapes, so it does not
+      // line up with FPMT's video cuts. Packaged from the FPMT MP3 release with
+      // concat_audio.py + concat_transcripts.py, then package_fpmt.py, which
+      // reads 1585/teaching.json.
+      //
+      //   fpmt page  https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/
+      //   lywa       https://lamayeshe.com/article/need-wisdom-and-compassion-audio-and-unedited-transcripts
+      //   mp3s       https://fpmt.box.com/v/TaraInstitute2006
+      //
+      // Uploaded to the real Swarm network and verified on
+      // api.gateway.ethswarm.org: metadata.json, audio.opus, transcript.txt and
+      // index.html all resolve, Range requests answer 206, and the audio and
+      // transcript hashes match the local originals byte for byte.
+      // ---------------------------------------------------------------------
+      id: 'tara-2006-1585',
+      title: 'The need for Wisdom and Compassion',
+      teacher: 'Lama Zopa Rinpoche',
+      date: '3 June 2006',
+      place: 'Tara Institute, Melbourne, Australia',
+      meta: 'Archive #1585 &middot; 4 h 31 m &middot; 3 parts',
+      formats: ['Audio', 'Transcript'],
+      rightsCleared: true,
+      sourceUrl: 'https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/',
+      reference: '697080c3b6d473f23a62dd40231943ba203acae22297e00004ce8389244594ef',
+      // Same postage batch as kopan-33: one batch covers the collections.
+      stamp: '954319f6374dd78af5c815ff874fcfd9579a85e58453098f7ee09828483da942',
+      stampNote: 'Immutable batch, paid for by MetaProvide. Real BZZ is committed; the batch drains and must be topped up.',
+      durationSeconds: 16270,
+      transcriptSha256: '02c207a5adfa2cc853dcc0a081e95de6d12b541d0b4c778a8879f9d00a6b3095'
+    },
+    {
       // Login-gated on lamayeshe.com, so it genuinely sits in the
       // "awaiting rights clearance" state rather than the queue.
       id: 'kopan-3',
