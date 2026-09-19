@@ -498,7 +498,7 @@ const CONFIG = {
                   <svg id="icon-more" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                   <span id="btn-more-label">Read full transcript</span>
                 </button>
-                <a id="feat-source" href="#" class="rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-text hover:border-primary/30 hover:text-primary">Read on lamayeshe.com</a>
+                <a id="feat-source" href="#" class="rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-text hover:border-primary/30 hover:text-primary">Read at source</a>
                 <a id="feat-download" href="#" class="rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-text hover:border-primary/30 hover:text-primary">Download transcript</a>
               </div>
             </div>
@@ -747,7 +747,19 @@ function renderFeatured() {
   $('feat-date').innerHTML    = feat.date;
   $('feat-place').innerHTML   = feat.place;
   $('feat-meta').innerHTML    = feat.meta;
-  if (feat.sourceUrl) $('feat-source').href = feat.sourceUrl;
+  // The label follows the link. These teachings do not all come from one
+  // place -- the Tara Institute pair is published by FPMT, Kopan by LYWA --
+  // and a button naming one archive while pointing at another is exactly the
+  // kind of unchecked claim this page exists to avoid making.
+  (function sourceLink() {
+    const a = $('feat-source');
+    if (!feat.sourceUrl) { a.classList.add('hidden'); return; }
+    a.classList.remove('hidden');
+    a.href = feat.sourceUrl;
+    let host = '';
+    try { host = new URL(feat.sourceUrl, location.href).hostname.replace(/^www\./, ''); } catch (e) { /* keep the generic label */ }
+    a.textContent = host ? 'Read on ' + host : 'Read at source';
+  })();
 
   if (!feat.reference) {
     $('feat-ref').textContent = '(no reference set)';
