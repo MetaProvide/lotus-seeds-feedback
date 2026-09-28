@@ -86,7 +86,7 @@ const CONFIG = {
       // Tara Institute, Melbourne, 2 and 3 June 2006. Published by FPMT; the
       // transcript is LYWA's, typed from the original tapes, so it does not
       // line up with FPMT's video cuts. Packaged from the FPMT MP3 release with
-      // concat_audio.py + concat_transcripts.py, then package_fpmt.py, which
+      // concat_audio.py + concat_transcripts.py, then package_swarm_archive.py, which
       // reads 1584/teaching.json.
       //
       //   fpmt page  https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/
@@ -119,7 +119,7 @@ const CONFIG = {
       // Tara Institute, Melbourne, 2 and 3 June 2006. Published by FPMT; the
       // transcript is LYWA's, typed from the original tapes, so it does not
       // line up with FPMT's video cuts. Packaged from the FPMT MP3 release with
-      // concat_audio.py + concat_transcripts.py, then package_fpmt.py, which
+      // concat_audio.py + concat_transcripts.py, then package_swarm_archive.py, which
       // reads 1585/teaching.json.
       //
       //   fpmt page  https://fpmt.org/media/streaming/teachings-of-lama-zopa-rinpoche/lama-zopa-rinpoche-teachings-in-tara-institute-2006/
@@ -819,7 +819,13 @@ function renderFeatured() {
   fetch(bzz(feat.reference, CONFIG.FILES.metadata))
     .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
     .then(m => {
-      const bytes = m && m.files && m.files[CONFIG.FILES.audio] && m.files[CONFIG.FILES.audio].bytes;
+      // lotus-swarm-archive/1 lists files as an array; records uploaded before
+      // it keyed them by path. Both are live on Swarm, so read both.
+      const files = m && m.files;
+      const audio = Array.isArray(files)
+        ? files.find(f => f.path === CONFIG.FILES.audio)
+        : files && files[CONFIG.FILES.audio];
+      const bytes = audio && audio.bytes;
       if (bytes) $('feat-size').textContent = (bytes / 1048576).toFixed(1) + ' MB';
     })
     .catch(() => { $('feat-size').textContent = 'unknown'; });
