@@ -255,7 +255,7 @@
 </head>
 <body>
 
-<div class="counter"><span id="cur">1</span> / <span id="tot">19</span></div>
+<div class="counter"><span id="cur">1</span> / <span id="tot">21</span></div>
 
 <div class="stage" id="stage">
 
@@ -268,7 +268,7 @@
     </svg>
     <div class="kicker" style="justify-content:center"><span class="dot"></span> Champion Center Program &middot; Session 4</div>
     <h1>Lotus Seeds</h1>
-    <p class="lead" style="max-width:58ch">Payments arrive, memberships settle, and a new place to test them.</p>
+    <p class="lead" style="max-width:58ch">Payments arrive, memberships settle, and both are ready for you to test.</p>
     <div class="meta-row">
       <span class="pill">Session 4 &middot; 7 October 2026</span>
       <span class="pill plum">Hosted by Lauren &amp; Jo&atilde;o</span>
@@ -349,6 +349,38 @@
     <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Live on staging &middot; Stripe test mode</span></div>
   </section>
 
+  <!-- 7b STRIPE SETUP -->
+  <section class="slide tight">
+    <div class="kicker"><span class="dot"></span> Payments &middot; getting set up</div>
+    <h2>Setting up Stripe, and testing a payment</h2>
+    <p>Before your center can take a payment, it connects its own Stripe account to Lotus. We built that onboarding to be simple and to follow Stripe&rsquo;s own recommended practice.</p>
+    <div class="grid g2" style="margin-top:16px;align-items:start">
+      <div>
+        <div class="card"><h3><span class="num">1</span> Connecting your account</h3><p>From the admin, your center starts Stripe&rsquo;s onboarding and is taken through Stripe&rsquo;s own screens: who you are, your bank details, your payout account. Lotus never sees or stores those details.</p></div>
+        <div class="card said" style="margin-top:13px"><h3>Need a hand? Ping Jo&atilde;o</h3><p>Whoever manages Stripe at your center may want help setting up the test account &mdash; that is completely normal. Message <strong>Jo&atilde;o</strong> in the <a href="https://galaxy.metaprovide.org/call/xzfrt5aj" target="_blank" rel="noopener">Galaxy channel</a> or at <a href="mailto:joao.raposo@metaprovide.org">joao.raposo@metaprovide.org</a> and we will set it up together.</p></div>
+      </div>
+      <div class="card"><h3><span class="num">2</span> Test cards, one click away</h3><p>On staging nothing is really charged. At checkout, <strong>click the button at the bottom of the payment form</strong> and Stripe offers ready-made test cards &mdash; no need to type a number.</p>
+        <p style="margin-top:10px">Two clicks, shown on the next slide. Or type the classic test card: <strong>4242 4242 4242 4242</strong>, any future date, any CVC.</p>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Stripe test mode on staging</span></div>
+  </section>
+
+  <!-- 7c STRIPE TEST CARDS -->
+  <section class="slide tight">
+    <div class="kicker"><span class="dot"></span> Payments &middot; testing at checkout</div>
+    <h2>Paying with a test card, in two clicks</h2>
+    <p>On staging, the checkout has a small Stripe button that fills in a test card for you. Nothing is really charged.</p>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><h3><span class="num">1</span> Click the Stripe button</h3><p>Bottom right of the checkout page.</p>
+        <a href="stripe-test-cards-1.png" target="_blank" rel="noopener" style="display:block;border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;height:230px;margin-top:10px;background:#fff"><img src="stripe-test-cards-1.png" alt="Checkout page with an arrow pointing to the Stripe button at the bottom right" style="position:absolute;right:0;bottom:0;width:175%;max-width:none"></a></div>
+      <div class="card"><h3><span class="num">2</span> Choose a test card</h3><p>Pick <strong>Visa &middot; successful (4242)</strong>, then press <strong>Pay now</strong>.</p>
+        <a href="stripe-test-cards-2.png" target="_blank" rel="noopener" style="display:block;border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative;height:230px;margin-top:10px;background:#fff"><img src="stripe-test-cards-2.png" alt="Stripe developer panel with the successful Visa 4242 test card highlighted" style="position:absolute;right:0;bottom:0;width:175%;max-width:none"></a></div>
+    </div>
+    <div style="margin-top:12px"><span class="pill">Want to see what a failure looks like? The same list has a declined card and a 3-D Secure card</span></div>
+    <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Stripe test mode on staging &middot; click an image to enlarge</span></div>
+  </section>
+
   <!-- 8 MEMBERSHIPS -->
   <section class="slide tight">
     <div class="kicker"><span class="dot"></span> What we shipped &middot; 3 of 4</div>
@@ -357,8 +389,8 @@
     <div class="grid g2" style="margin-top:16px">
       <div class="card"><h3>For your members</h3><p>Public membership pages, a signup flow, and a place in <strong>My Lotus</strong> to see and manage their membership: pause, resume, cancel, or change plan.</p></div>
       <div class="card"><h3>For your team</h3><p>The same actions from the admin side, and versions you can publish, archive and copy &mdash; so raising a price never quietly re-prices the people who already joined.</p></div>
-      <div class="card"><h3>Benefits that work at registration</h3><p>A member registering for an included event pays nothing, automatically. Courses included in a membership open up for members too.</p></div>
-      <div class="card said"><h3>What comes next is yours</h3><p>The next improvements come from your feedback on the program you built. That is why the membership you create matters.</p></div>
+      <div class="card"><h3>Today: memberships give access</h3><p>A membership gives access to <strong>events, courses, or both</strong>. A member registering for an included event pays nothing, automatically, and included courses open up for them. <strong>That is all a membership does today &mdash; no discounts</strong> on events or anything else.</p></div>
+      <div class="card said"><h3>What else should a membership do?</h3><p>Some of you need more than access. Chandrakirti&rsquo;s membership includes things like <strong>one free class a week</strong> or <strong>one free retreat a year</strong>; other centers may need a discount, such as <strong>10% off events</strong>. We do not support these yet. <strong>Tell us what your center needs</strong>, so we know what to build next.</p></div>
     </div>
     <div class="footline"><span class="brand">LOTUS SEEDS</span><span>Live on staging today</span></div>
   </section>
@@ -487,7 +519,6 @@
       </div>
     </div>
     <div class="gate-note">
-      <span class="pill">Programs: Discovering Buddhism and the Basic Program stop having to be faked</span>
     </div>
     <div class="footline"><span class="brand">LOTUS SEEDS</span><span>The order is the commitment</span></div>
   </section>
@@ -609,7 +640,7 @@
       </div>
       <div class="card">
         <h3><span class="num">3</span> Pay for both</h3>
-        <p>Register for your event and <strong>pay at checkout</strong>, then join your membership. Use the test card <strong>4242 4242 4242 4242</strong>, any future date, any CVC &mdash; nothing is really charged.</p>
+        <p>Register for your event and <strong>pay at checkout</strong>, then join your membership. Use the <strong>test-card button</strong> at the bottom of the payment form, or type <strong>4242 4242 4242 4242</strong> &mdash; nothing is really charged. Stripe not connected yet? Ping Jo&atilde;o.</p>
       </div>
     </div>
     <div class="grid g2" style="margin-top:14px">
