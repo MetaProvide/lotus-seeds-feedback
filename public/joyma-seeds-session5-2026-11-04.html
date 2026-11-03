@@ -259,7 +259,7 @@
 </head>
 <body>
 
-<div class="counter"><span id="cur">1</span> / <span id="tot">20</span></div>
+<div class="counter"><span id="cur">1</span> / <span id="tot">15</span></div>
 
 <div class="stage" id="stage">
 
@@ -282,13 +282,13 @@
 
   <!-- 2 AGENDA -->
   <section class="slide">
-    <div class="kicker"><span class="dot"></span> Today, in about an hour</div>
+    <div class="kicker"><span class="dot"></span> Today, in 20 minutes</div>
     <h2>What we built, and where it goes next</h2>
     <p>What changed since October, the roadmap ahead, then your questions and what we would love you to try before December.</p>
     <div class="grid g3" style="margin-top:24px">
-      <div class="card"><h3><span class="num">1</span> What we shipped</h3><p>Payments finished, memberships rebuilt around what you asked for, Study spaces for online courses, and easier event creation.</p></div>
-      <div class="card"><h3><span class="num">2</span> The roadmap</h3><p>Gate E is delivered. Next comes your website, and the way your teaching is organised: categories, a calendar and study programmes.</p></div>
-      <div class="card"><h3><span class="num">3</span> Questions, and what to try</h3><p>Open floor, one question about your website, then one ask before December: set up a membership with the new guided setup, and pay for it.</p></div>
+      <div class="card"><h3><span class="num">1</span> What we shipped</h3><p>Payments finished, memberships rebuilt around what you asked for, Study spaces for online courses, easier event creation, and Cyber Essentials.</p></div>
+      <div class="card"><h3><span class="num">2</span> Meet Maile, and the roadmap</h3><p>Our new UI/UX designer, who introduces herself after the presentation. Gate E is delivered. Next comes your website, and the way your teaching is organised: event types, categories, tags and a calendar.</p></div>
+      <div class="card"><h3><span class="num">3</span> Stripe, and your questions</h3><p>One center at a time: getting your Stripe test account connected, so you can test payments. Then the open floor.</p></div>
     </div>
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Session 5 &middot; 4 November 2026</span></div>
   </section>
@@ -301,10 +301,24 @@
     <div class="grid g3" style="margin-top:18px">
       <div class="card"><h3>Your test environment</h3><p>Now at <a href="https://stage.joyma.co/admin" target="_blank" rel="noopener">stage.joyma.co/admin</a>. The old address still works and takes you there.</p></div>
       <div class="card"><h3>Your logins</h3><p>Unchanged. Each center&rsquo;s admin login is the same one you have been using, and it is on the hub.</p></div>
-      <div class="card"><h3>Our meetings</h3><p>Same link, same first Wednesday of the month. The hub and the recordings stay where they are.</p></div>
+      <div class="card"><h3>Our meetings</h3><p>Same first Wednesday of the month. <strong>From December, a new link:</strong> <a href="https://greet.metaprovide.org/joyma-seeds" target="_blank" rel="noopener">greet.metaprovide.org/joyma-seeds</a>. The hub and the recordings stay where they are.</p></div>
     </div>
     <div style="margin-top:16px"><span class="pill">You may still see &ldquo;Lotus&rdquo; in a few places for a while. Tell us if one bothers you.</span></div>
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>joyma.co</span></div>
+  </section>
+
+  <!-- 3b UI/UX -->
+  <section class="slide tight">
+    <div class="kicker"><span class="dot"></span> New to the team</div>
+    <h2>Welcome, Maile: designing the experience with you</h2>
+    <p>Maile joins us as our UI/UX designer. She starts with <strong>your team&rsquo;s experience in the admin</strong>, and later the <strong>experience of your participants</strong>. Maile will introduce herself after the presentation.</p>
+    <div class="grid g3" style="margin-top:18px">
+      <div class="card"><h3><span class="num">1</span> The problem she solves</h3><p>Creating a membership or an event is where you, and we, struggle most.</p></div>
+      <div class="card"><h3><span class="num">2</span> Right from the start</h3><p>Instead of working out what to fix again after every round of feedback, she designs it properly from the start, so it is easier for you.</p></div>
+      <div class="card said"><h3><span class="num">3</span> Your feedback, gathered</h3><p>Maile is gathering everything you have sent us so far, and what you send next. Where she needs more, she may ask you directly.</p></div>
+    </div>
+    <div style="margin-top:16px"><span class="pill">First: creating memberships and events. Later: what your participants see</span></div>
+    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Designing with you, not for you</span></div>
   </section>
 
   <!-- 4 YOU TOLD US -->
@@ -316,103 +330,30 @@
       <thead><tr><th>You told us</th><th>What we did</th></tr></thead>
       <tbody>
         <tr><td>Memberships need a sliding scale, so members can pay what they can (Thubten Norbu Ling)</td><td><span class="tick">Done.</span> Sliding-scale pricing for memberships</td></tr>
+        <tr><td>I can&rsquo;t pay for a membership (Chandrakirti)</td><td><span class="tick">Done.</span> Membership payment works end to end, tested on 2 November</td></tr>
         <tr><td>Creating a membership takes too many screens, and it is unclear what to do next</td><td><span class="tick">Done.</span> A guided membership setup with tutorials</td></tr>
         <tr><td>I lost what I had typed when I navigated away</td><td><span class="tick">Done.</span> A warning before you leave a form with unsaved changes, and a review step before you create an event</td></tr>
         <tr><td>&ldquo;Can&rsquo;t publish&rdquo;, but not why</td><td><span class="tick">Done.</span> Publishing now tells you exactly what is missing, and on which booking option</td></tr>
-        <tr><td>I can&rsquo;t pay for a membership (Chandrakirti)</td><td><span class="tick">Done.</span> Membership payment works end to end, tested on 2 November</td></tr>
         <tr><td>I want to duplicate an event</td><td><span class="soon">Not yet.</span> Still on the list, with the next round of event creation</td></tr>
       </tbody>
     </table>
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Keep it coming: the form and the channel</span></div>
   </section>
 
-  <!-- 5 PAYMENTS -->
+  <!-- 5 WHAT WE SHIPPED -->
   <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> What we shipped &middot; 1 of 5 &middot; Payments</div>
-    <h2>Payments, closed out</h2>
-    <p>In October you saw the first version. Everything around a payment is now in place, for events, courses and memberships.</p>
-    <div class="grid g2" style="margin-top:16px">
-      <div class="card"><h3>Refunds and payment links</h3><p>Issue a full or partial refund from the admin. Send a payment link to someone who could not pay online, and see it next to its order.</p></div>
-      <div class="card"><h3>Invoices and receipts</h3><p>Every payment has an invoice, served straight from Stripe and downloadable by the participant. They also get an email when their payment is received.</p></div>
-      <div class="card"><h3>Courses, paid like events</h3><p>Registering for a course now goes through exactly the same registration and checkout as an event.</p></div>
-      <div class="card"><h3>A clearer My orders</h3><p>Each order links to its registration, course orders show the course and its date, and dates follow the participant&rsquo;s language.</p></div>
-    </div>
-    <div style="margin-top:14px"><span class="pill">Plus redesigned confirmation pages and emails, so a participant knows exactly what they booked</span></div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Live on staging &middot; Stripe test mode</span></div>
-  </section>
-
-  <!-- 6 MEMBERSHIPS -->
-  <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> What we shipped &middot; 2 of 5 &middot; Memberships</div>
-    <h2>Memberships you can sell, and pay for</h2>
-    <p>In October a membership could give access, but joining with a payment was still coming. Now the whole path works.</p>
-    <div class="grid g2" style="margin-top:16px">
-      <div class="card"><h3>Sliding-scale pricing</h3><p>Set a minimum and a suggested amount, and let each member choose what they can give. Built for Thubten Norbu Ling&rsquo;s request, available to every center.</p></div>
-      <div class="card"><h3>Paying for a membership</h3><p>The card form appears at signup, payment is asked before the membership starts, and nothing gets stuck at &ldquo;payment pending&rdquo;.</p></div>
-      <div class="card"><h3>A better My Membership</h3><p>Members see their plan&rsquo;s name, when they last paid and the invoice, and they confirm before a cancellation is scheduled.</p></div>
-      <div class="card"><h3>Courses included in a membership</h3><p>A membership that includes a course now opens it for the member in Moodle.</p></div>
-    </div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Tested end to end on 2 November</span></div>
-  </section>
-
-  <!-- 7 GUIDED MEMBERSHIP SETUP -->
-  <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> What we shipped &middot; 3 of 5 &middot; You told us</div>
-    <h2>A guided membership setup, with tutorials</h2>
-    <p>You told us creating a membership took too many screens and that the steps were hard to find. It is now one guided path, from first idea to published.</p>
+    <div class="kicker"><span class="dot"></span> What we shipped since October</div>
+    <h2>Five things you can try today, and a certificate</h2>
+    <p>All of it is live on staging.</p>
     <div class="grid g3" style="margin-top:16px">
-      <div class="card"><h3><span class="num">1</span> The offering</h3><p>What the membership is called and what it is for.</p></div>
-      <div class="card"><h3><span class="num">2</span> Tiers and pricing</h3><p>The levels you offer, with fixed or sliding-scale prices.</p></div>
-      <div class="card"><h3><span class="num">3</span> Benefits</h3><p>Which events and courses each tier includes.</p></div>
-      <div class="card"><h3><span class="num">4</span> Terms</h3><p>How long it lasts and how it renews.</p></div>
-      <div class="card"><h3><span class="num">5</span> Review</h3><p>Everything on one screen before you commit.</p></div>
-      <div class="card"><h3><span class="num">6</span> Publish</h3><p>Live in one step. Nothing is half-saved if you stop midway.</p></div>
+      <div class="card"><h3>Payments, closed out</h3><p>Refunds, payment links, invoices and receipts, for events, courses and memberships.</p></div>
+      <div class="card"><h3>Memberships you can pay for</h3><p>Sliding-scale pricing, payment at signup, and a clearer My Membership page.</p></div>
+      <div class="card"><h3>Guided membership setup</h3><p>Six steps from idea to published, with short tutorials in English and French.</p></div>
+      <div class="card"><h3>Creating an event</h3><p>A warning before you lose your work, a review step, and clear reasons when an event cannot be published.</p></div>
+      <div class="card"><h3>Study spaces and My Study</h3><p>Your Moodle courses as Self-study or included with an event, all in one My Study page.</p></div>
+      <div class="card said"><h3>Cyber Essentials: certified</h3><p>Certified on 20 October. A recognised certificate your board can point to. <a href="https://joyfuleffort.com/trust-center" target="_blank" rel="noopener">See it on the Trust Center</a></p></div>
     </div>
-    <div style="margin-top:14px"><span class="pill plum">Short tutorials in English and French walk you through it, and you can replay them any time</span></div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>New since 2 November</span></div>
-  </section>
-
-  <!-- 8 EVENT CREATION -->
-  <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> What we shipped &middot; 4 of 5 &middot; Event creation</div>
-    <h2>Creating an event, a little easier again</h2>
-    <p>In October we promised fewer errors and not losing your work. Here is what changed, and what is still to come.</p>
-    <div class="grid g2" style="margin-top:16px">
-      <div class="card"><h3>Not losing your work</h3><p>A warning before you leave a form with unsaved changes, and a review step that shows the whole event before you create it.</p></div>
-      <div class="card"><h3>Clearer about what is missing</h3><p>&ldquo;Not ready to publish&rdquo; now names the booking option that needs attention, updates as soon as you fix it, and publishing explains why when it cannot go ahead.</p></div>
-      <div class="card"><h3>Fewer mix-ups</h3><p>A warning when a new event has the same title as one you already have. Events that have already started stay visible and keep their price.</p></div>
-      <div class="card said"><h3>Still to come</h3><p>Duplicating an event, repeating on more than one weekday (say, Mondays and Wednesdays), and a clearer first step. These come with the next round of design work.</p></div>
-    </div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Tell us where it still hurts</span></div>
-  </section>
-
-  <!-- 9 STUDY SPACES -->
-  <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> What we shipped &middot; 5 of 5 &middot; Online learning</div>
-    <h2>Study spaces, and a new My Study page</h2>
-    <p>Your Moodle courses are now <strong>Study spaces</strong>, and live courses with Zoom links become ordinary events. That makes it clear what is self-paced and what has a schedule.</p>
-    <div class="grid g2" style="margin-top:16px">
-      <div class="card"><h3>Self-study, on its own</h3><p>A Study space can be listed publicly as <strong>Self-study</strong>, start anytime, and sold on its own.</p></div>
-      <div class="card"><h3>Included with an event</h3><p>Registering for an event can open a Study space alongside it, for example the reading and recordings for a course. Access stays open after the event ends.</p></div>
-      <div class="card"><h3>Private when you need it</h3><p>A Study space can be kept private, so it only opens through an event or a membership.</p></div>
-      <div class="card"><h3>My Study</h3><p>Participants have one page with every Study space they can open, and where each one came from.</p></div>
-    </div>
-    <div style="margin-top:14px"><span class="pill warm">One known issue: after paying for a Self-study space, signing in to the Moodle course can fail. We are fixing it now</span></div>
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Live on staging</span></div>
-  </section>
-
-  <!-- 10 TAXONOMY DECISIONS -->
-  <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> Decided on 20 October</div>
-    <h2>Event types, categories and tags</h2>
-    <p>How your program is organised, so participants can browse it and filter a calendar. Thank you, Nina, for sharing Thubten Norbu Ling&rsquo;s tags: they shaped this.</p>
-    <div class="grid g3" style="margin-top:16px">
-      <div class="card"><h3>Shared across the network</h3><p>Categories and tags are the same for every center, so search and the calendar work everywhere. You will be able to request a new tag.</p></div>
-      <div class="card"><h3>A retreat is a type of event</h3><p>Retreats are an <strong>event type</strong>, like a class or a course, not a category. The category list says what the teaching is about.</p></div>
-      <div class="card"><h3>Study programmes</h3><p>Programmes get their own place, with order and optional parts across events and Study spaces. Official FPMT programmes carry a badge; your own programmes sit alongside them.</p></div>
-    </div>
-    <div style="margin-top:16px"><span class="pill">Built next, with design input, together with the calendar view</span></div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Decided with Lauren, from your input</span></div>
   </section>
 
   <!-- 11 ALSO SHIPPED -->
@@ -433,21 +374,18 @@
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Live on staging today</span></div>
   </section>
 
-  <!-- 12 TESTING & SECURITY -->
+  <!-- 10 TAXONOMY DECISIONS -->
   <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> How we check our own work</div>
-    <h2>Tested, and checked by someone other than us</h2>
-    <p>Every change ships with its own tests. This month we also fixed and re-tested the bugs your testing and ours turned up.</p>
-    <div class="statline" style="margin-top:18px">
-      <div class="stat"><div class="big">2,733</div><div class="lbl">automated tests, up from ~1,980 in October</div></div>
-      <div class="stat"><div class="big">115</div><div class="lbl">browser tests that click through Joyma like a person, up from 54</div></div>
-      <div class="stat"><div class="big">36</div><div class="lbl">bugs fixed and re-tested since 20 October</div></div>
+    <div class="kicker"><span class="dot"></span> A quick update &middot; decided on 20 October</div>
+    <h2>Event types, categories and tags</h2>
+    <p>How your program is organised, so participants can browse it and filter a calendar. Thank you, Nina, for sharing Thubten Norbu Ling&rsquo;s tags: they shaped this.</p>
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card"><h3>Shared across the network</h3><p>Categories and tags are the same for every center, so search and the calendar work everywhere. You will be able to request a new tag.</p></div>
+      <div class="card"><h3>A retreat is a type of event</h3><p>Retreats are an <strong>event type</strong>, like a class or a course, not a category. The category list says what the teaching is about.</p></div>
+      <div class="card said"><h3>Study programmes &middot; later</h3><p>On the longer-term roadmap. Programmes will get their own place, with order and optional parts across events and Study spaces. Official FPMT programmes carry a badge; your own programmes sit alongside them.</p></div>
     </div>
-    <div class="grid g2" style="margin-top:18px">
-      <div class="card"><h3>Cyber Essentials: certified</h3><p>Certified on 20 October 2026. A recognised certificate your board can point to.</p></div>
-      <div class="card"><h3>Independent security review: fixed</h3><p>Every serious finding from the review is fixed and re-checked.</p></div>
-    </div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Tests are part of every change, not an extra</span></div>
+    <div style="margin-top:16px"><span class="pill">Event types, categories and tags are built next, with design input, together with the calendar view</span></div>
+    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Decided with Lauren, from your input</span></div>
   </section>
 
   <!-- 13 ROADMAP SO FAR -->
@@ -498,55 +436,23 @@
       <div class="gate soft">
         <div class="gate-head"><span class="glabel">Gate F</span><span class="gtag warm">Next &middot; December</span></div>
         <h3>Your website, and how your teaching is organised</h3>
-        <p><strong>Your events on your own website</strong>, with registration and payment on Joyma. Plus <strong>event types, categories and tags</strong>, a <strong>calendar view</strong> of your program, and <strong>study programmes</strong>, shaped with our new design input.</p>
+        <p><strong>Your events on your own website</strong>, where people can register and pay without leaving your site, with Joyma underneath. Plus <strong>event types, categories and tags</strong> and a <strong>calendar view</strong> of your program, shaped with our new design input.</p>
       </div>
       <div class="gate later">
-        <div class="gate-head"><span class="glabel">Gate G</span><span class="gtag warm">2027 &middot; indicative</span></div>
-        <h3>Donations</h3>
-        <p>Donors and donations, including the optional donation at checkout you asked for, now that the payment rails exist.</p>
+        <div class="gate-head"><span class="glabel">Gate G</span><span class="gtag warm">End of December</span></div>
+        <h3>Donations and privacy</h3>
+        <p><strong>Donations</strong>, including the optional donation at checkout you asked for. And the <strong>privacy (GDPR) features</strong> your participants are entitled to: accepting the terms, closing their account, getting a copy of their data.</p>
       </div>
       <div class="gate later" style="border-style:dashed">
         <div class="gate-head"><span class="glabel">On our list</span><span class="gtag warm">Not yet in a gate</span></div>
         <h3>Things we know are needed</h3>
-        <p>Duplicating events and templates, bringing your existing data in, search across the whole network, and a mobile app.</p>
+        <p><strong>Study programmes</strong>, duplicating events and templates, bringing your existing data in, search across the whole network, and a mobile app.</p>
       </div>
     </div>
     <div class="gate-note">
       <span class="pill warm">If one of these matters more to your center than the gates, tell us</span>
     </div>
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>The order is the commitment</span></div>
-  </section>
-
-  <!-- 15 WEBSITE QUESTION -->
-  <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> We need your input &middot; Gate F</div>
-    <h2>Your website, and your events on it</h2>
-    <p>The starting point we propose: <strong>Joyma stays the place where events are created, booked and paid for</strong>, and your website shows them, always up to date, with a Register button that opens Joyma. Before we build it, we need to know your website.</p>
-    <div class="grid g2" style="margin-top:16px">
-      <div class="card"><h3><span class="num">1</span> What is your website built with?</h3><p>WordPress, Squarespace, Wix, something custom? And who changes it when something needs changing?</p></div>
-      <div class="card"><h3><span class="num">2</span> How do events get there today?</h3><p>Typed in by hand, copied from a spreadsheet, a plug-in, a link to another booking site?</p></div>
-      <div class="card"><h3><span class="num">3</span> What should a visitor see?</h3><p>A simple list of what is on, a calendar, filters by teacher or type, or one event at a time on its own page?</p></div>
-      <div class="card said"><h3><span class="num">4</span> Should registering stay on your site?</h3><p>Opening Joyma to register is quick to build. Registering and paying without leaving your site is possible, and takes considerably longer.</p></div>
-    </div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>A rough answer in the channel is plenty</span></div>
-  </section>
-
-  <!-- 16 HUB -->
-  <section class="slide tight">
-    <div class="kicker"><span class="dot"></span> Everything in one place</div>
-    <h2>The Joyma Seeds hub</h2>
-    <p>One page with everything you need between sessions, so you never have to dig through old emails.</p>
-    <div style="margin-top:14px"><p style="font-size:22px"><a href="https://feedback.joyfuleffort.com/joyma-seeds-hub" target="_blank" rel="noopener">feedback.joyfuleffort.com/joyma-seeds-hub</a></p></div>
-    <div class="grid g3" style="margin-top:16px">
-      <div class="card"><h3>Every session</h3><p>The slides and the full recording of every session so far, this one included.</p></div>
-      <div class="card"><h3>Your login</h3><p>The test environment address and each center&rsquo;s admin login.</p></div>
-      <div class="card"><h3>Dates and times</h3><p>Every upcoming session, in your time zone.</p></div>
-    </div>
-    <div class="grid g2" style="margin-top:13px">
-      <div class="card"><h3>What to test</h3><p>This month&rsquo;s tasks, written out step by step.</p></div>
-      <div class="card"><h3>Where we need your input</h3><p>The open questions only your center can answer, now including your website.</p></div>
-    </div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Bookmark it</span></div>
   </section>
 
   <!-- 17 CADENCE -->
@@ -562,7 +468,7 @@
       <div class="tl b2"><div class="knob">5</div><div class="date">4 November</div><div class="lbl">Today &middot; payments closed</div></div>
     </div>
     <div class="demoflag">
-      <span class="pill plum">Next session: Wednesday 2 December 2026</span>
+      <span class="pill plum">Next session: Wednesday 2 December 2026 &middot; <a href="https://greet.metaprovide.org/joyma-seeds" target="_blank" rel="noopener">greet.metaprovide.org/joyma-seeds</a></span>
       <div class="tzrow">
         <span class="tz"><strong>16:00</strong> London (GMT) &middot; Lisbon (WET)</span>
         <span class="tz"><strong>17:00</strong> Paris &middot; Madrid (CET)</span>
@@ -570,9 +476,28 @@
         <span class="tz"><strong>09:00</strong> Santa Fe (MST)</span>
         <span class="tz"><strong>05:00</strong> Thu &middot; Nelson, NZ (NZDT)</span>
       </div>
-      <p class="sub" style="margin:10px auto 0;max-width:70ch">Winter time everywhere, so the same clock times as before. Jo&atilde;o is away 28 November to 7 December; we will confirm in the channel how the December session runs.</p>
+      <p class="sub" style="margin:10px auto 0;max-width:70ch">Winter time everywhere, so the same clock times as before. Jo&atilde;o will not be at the next session; we will confirm in the channel who hosts it.</p>
     </div>
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Working software every cycle</span></div>
+  </section>
+
+  <!-- 17b PAYMENTS ROUND THE TABLE -->
+  <section class="slide tight">
+    <div class="kicker"><span class="dot"></span> Round the table &middot; payments</div>
+    <h2>Is your Stripe connected? Let&rsquo;s unblock it today</h2>
+    <p><strong>No center has connected its own Stripe test account yet</strong>, and every test this month needs a payment. We go one center at a time: who manages Stripe, what is in the way, and what would help.</p>
+    <table class="asks">
+      <thead><tr><th>Center</th><th>Stripe test account</th><th>What would help</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Jamyang</strong> &middot; London</td><td><span class="soon">Not yet</span></td><td>One Stripe account for the center, confirmed in August. Who sets it up?</td></tr>
+        <tr><td><strong>IVY</strong> &middot; France</td><td><span class="soon">Not yet</span></td><td>The account on staging today is our test account, not yours. Who at IVY manages Stripe?</td></tr>
+        <tr><td><strong>Shantideva</strong> &middot; New York</td><td><span class="soon">Not yet</span></td><td>Who manages Stripe at the center?</td></tr>
+        <tr><td><strong>Thubten Norbu Ling</strong> &middot; Santa Fe</td><td><span class="soon">Not yet</span></td><td>Ready to try the sliding-scale membership once connected</td></tr>
+        <tr><td><strong>Chandrakirti</strong> &middot; Nelson</td><td><span class="soon">Not yet</span></td><td>Asked for a hand in October; follow up after the call, as you watch the recording</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px"><span class="pill plum">Stuck at any step? Jo&atilde;o or Mahyar will set it up with you on a short call this week</span></div>
+    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Test mode only &middot; nothing is really charged</span></div>
   </section>
 
   <!-- 18 Q&A -->
@@ -583,6 +508,24 @@
     <div style="margin-top:24px"><span class="pill">If we do not know the answer, we will say so and come back to you in the channel</span></div>
     <div class="spacer"></div>
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>No question is too small</span></div>
+  </section>
+
+  <!-- 16 HUB -->
+  <section class="slide tight">
+    <div class="kicker"><span class="dot"></span> Everything in one place</div>
+    <h2>The Joyma Seeds hub</h2>
+    <p>One page with everything you need between sessions, so you never have to dig through old emails.</p>
+    <div style="margin-top:14px"><p style="font-size:22px"><a href="https://feedback.joyfuleffort.com/joyma-seeds-hub" target="_blank" rel="noopener">feedback.joyfuleffort.com/joyma-seeds-hub</a></p></div>
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card"><h3>Every session</h3><p>The slides and the full recording of every session so far, this one included.</p></div>
+      <div class="card"><h3>Your login</h3><p>The test environment address and each center&rsquo;s admin login.</p></div>
+      <div class="card"><h3>Dates and times</h3><p>Every upcoming session, in your time zone.</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:13px">
+      <div class="card"><h3>What to test</h3><p>This month&rsquo;s tasks, written out step by step.</p></div>
+      <div class="card"><h3>Where we need your input</h3><p>The open questions only your center can answer.</p></div>
+    </div>
+    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Bookmark it</span></div>
   </section>
 
   <!-- 19 FEEDBACK LOOP -->
@@ -616,39 +559,6 @@
     </div>
     <div style="margin-top:16px"><span class="pill">Every item gets a response, and accepted ones show up in the next demo</span></div>
     <div class="footline"><span class="brand">JOYMA SEEDS</span><span>Async first &middot; reach us anytime</span></div>
-  </section>
-
-  <!-- 20 NEXT TASK -->
-  <section class="slide tight x6">
-    <div class="kicker"><span class="dot"></span> Before 2 December, on staging</div>
-    <h2>Set up a membership with the guided setup, and pay for it</h2>
-    <p class="lead">This time the whole path works: create it, join it, pay for it, and see it in My Membership. With a test card, so nothing is charged.</p>
-    <div class="grid g3" style="margin-top:16px">
-      <div class="card">
-        <h3><span class="num">1</span> Your real membership</h3>
-        <p>Build the one you would actually offer with the <strong>guided setup</strong>: real tiers, prices and what each includes. Try a <strong>sliding scale</strong> if your center uses one. Did the tutorials help?</p>
-      </div>
-      <div class="card">
-        <h3><span class="num">2</span> Join it and pay</h3>
-        <p>As a participant, join and pay with the <strong>test-card button</strong> at the bottom of the payment form, or <strong>4242 4242 4242 4242</strong>. Then open My Membership and check your last payment and invoice.</p>
-      </div>
-      <div class="card">
-        <h3><span class="num">3</span> An event, and its invoice</h3>
-        <p>Register and pay for one of your events, then download the invoice from <strong>My orders</strong>. Have Moodle courses? Look at your Study spaces and My Study.</p>
-      </div>
-    </div>
-    <div class="grid g2" style="margin-top:14px">
-      <div class="card said">
-        <h3>And tell us about your website</h3>
-        <p>The four questions from earlier, in the channel. A rough answer is plenty, and it decides how we build Gate F.</p>
-      </div>
-      <div class="card">
-        <h3>And one thing that felt wrong</h3>
-        <p>One honest observation from each of you is enough to change the next cycle. The form or the channel, whichever is quicker. Stripe not connected yet? Ping Jo&atilde;o.</p>
-      </div>
-    </div>
-    <div style="margin-top:14px"><span class="pill">Thank you. The sliding scale and the guided setup are your feedback, built.</span></div>
-    <div class="footline"><span class="brand">JOYMA SEEDS</span><span>See you on 2 December</span></div>
   </section>
 
 </div>
